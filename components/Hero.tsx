@@ -86,8 +86,51 @@ export default function Hero() {
             </motion.a>
           </div>
 
-          {/* Orb */}
+          {/* Orb + subtle HUD details (your orb untouched) */}
           <div className="relative flex justify-center items-center">
+            {/* --- Decorative: concentric rings behind the orb --- */}
+            <svg
+              width="440"
+              height="440"
+              viewBox="0 0 440 440"
+              className="pointer-events-none absolute -z-10"
+              style={{ opacity: hovered ? 0.85 : 0.4 }}
+            >
+              {/* Outer dashed */}
+              <circle
+                cx="220"
+                cy="220"
+                r="190"
+                fill="none"
+                stroke={hovered ? '#9fbad1' : '#cbd5e1'}
+                strokeWidth="1.5"
+                strokeDasharray="6 10"
+                strokeOpacity="0.7"
+              />
+              {/* Mid dotted */}
+              <circle
+                cx="220"
+                cy="220"
+                r="158"
+                fill="none"
+                stroke={hovered ? '#97d6cc' : '#a8c5bf'}
+                strokeWidth="1"
+                strokeDasharray="2 8"
+                strokeOpacity="0.6"
+              />
+              {/* Inner thin */}
+              <circle
+                cx="220"
+                cy="220"
+                r="126"
+                fill="none"
+                stroke={hovered ? '#5eead4' : '#86efac'}
+                strokeWidth="1"
+                strokeOpacity="0.45"
+              />
+            </svg>
+
+            {/* Rotating tick ring (kept) */}
             <motion.div
               className="absolute"
               animate={ticks}
@@ -107,10 +150,17 @@ export default function Hero() {
               ))}
             </motion.div>
 
+            {/* --- corner brackets for a subtle “targeting” feel --- */}
+            <CornerBracket side="tl" active={hovered} />
+            <CornerBracket side="tr" active={hovered} />
+            <CornerBracket side="bl" active={hovered} />
+            <CornerBracket side="br" active={hovered} />
+
+            {/* Orb (unchanged behavior) */}
             <motion.div
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
-              className="w-56 h-56 md:w-72 md:h-72 rounded-full flex items-center justify-center cursor-pointer relative overflow-hidden"
+              className="w-56 h-56 md:w-72 md:h-72 rounded-full flex items-center justify-center cursor-pointer relative overflow-hidden z-10"
               whileHover={{
                 scale: 1.12,
                 boxShadow:
@@ -148,6 +198,34 @@ export default function Hero() {
                 hover over me
               </span>
             </motion.div>
+
+            {/* --- small metric chips that “make sense” for a dev agency --- */}
+            <motion.div
+              className="absolute -top-7 left-8"
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: hovered ? 1 : 0.75, y: hovered ? 0 : -2 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Pill label="Lighthouse" value="98" active={hovered} />
+            </motion.div>
+
+            <motion.div
+              className="absolute top-10 -right-4"
+              initial={{ opacity: 0, x: 6 }}
+              animate={{ opacity: hovered ? 1 : 0.75, x: hovered ? 0 : 2 }}
+              transition={{ duration: 0.3, delay: 0.05 }}
+            >
+              <Pill label="Core Web Vitals" value="Pass" active={hovered} />
+            </motion.div>
+
+            <motion.div
+              className="absolute -bottom-5 right-10"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: hovered ? 1 : 0.75, y: hovered ? 0 : 2 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              <Pill label="WCAG" value="AA" active={hovered} />
+            </motion.div>
           </div>
         </div>
 
@@ -174,4 +252,79 @@ export default function Hero() {
       </div>
     </section>
   );
+}
+
+/* ---------- tiny presentational helpers (used around the orb) ---------- */
+
+function Pill({
+  label,
+  value,
+  active,
+}: {
+  label: string;
+  value: string;
+  active: boolean;
+}) {
+  return (
+    <div
+      className={[
+        'flex items-center gap-2 rounded-full px-3 py-1.5 shadow-sm border backdrop-blur',
+        active
+          ? 'bg-white/85 border-teal-300/60'
+          : 'bg-white/70 border-slate-300/60',
+      ].join(' ')}
+    >
+      <span
+        className={[
+          'h-1.5 w-1.5 rounded-full',
+          active ? 'bg-teal-500' : 'bg-slate-400',
+        ].join(' ')}
+      />
+      <span
+        className={[
+          'font-mono text-[11px]',
+          active ? 'text-slate-600' : 'text-slate-500',
+        ].join(' ')}
+      >
+        {label}
+      </span>
+      <span
+        className={[
+          'text-[12px] font-semibold',
+          active ? 'text-slate-800' : 'text-slate-700',
+        ].join(' ')}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * Four minimal “corner brackets” around the orb area.
+ * side: tl | tr | bl | br
+ */
+function CornerBracket({ side, active }: { side: 'tl' | 'tr' | 'bl' | 'br'; active: boolean }) {
+  const base =
+    'pointer-events-none absolute h-8 w-8 opacity-60 md:opacity-70';
+  const color = active ? 'border-teal-300' : 'border-slate-300';
+  const pos =
+    side === 'tl'
+      ? '-top-8 -left-8'
+      : side === 'tr'
+      ? '-top-8 -right-8'
+      : side === 'bl'
+      ? '-bottom-8 -left-8'
+      : '-bottom-8 -right-8';
+
+  const borders =
+    side === 'tl'
+      ? 'border-t border-l rounded-tl-lg'
+      : side === 'tr'
+      ? 'border-t border-r rounded-tr-lg'
+      : side === 'bl'
+      ? 'border-b border-l rounded-bl-lg'
+      : 'border-b border-r rounded-br-lg';
+
+  return <div className={`${base} ${pos} ${color} ${borders}`} />;
 }
