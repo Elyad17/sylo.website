@@ -6,6 +6,7 @@ import { motion, useAnimation } from 'framer-motion';
 export default function Hero() {
   const [hovered, setHovered] = useState(false);
   const ticks = useAnimation();
+  const bgControls = useAnimation(); // shared animation for navbar + bg
 
   useEffect(() => {
     ticks.start({
@@ -14,31 +15,52 @@ export default function Hero() {
     });
   }, [ticks]);
 
+  useEffect(() => {
+    bgControls.start({
+      background:
+        hovered
+          ? 'radial-gradient(1200px at 50% 40%, #0b1323 0%, #020617 60%)'
+          : 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)',
+      color: hovered ? '#ffffff' : '#0f172a',
+      transition: { duration: 0.6, ease: 'easeInOut' },
+    });
+  }, [hovered, bgControls]);
+
   const ringRadius = hovered ? 145 : 115;
   const lines = ['WEBSITE DESIGN', 'THAT', 'STANDS OUT'];
 
   return (
-    // ↓ shorter than full screen so the marquee is visible without scrolling
-    <section className="relative min-h-[88vh] overflow-hidden">
-      {/* Light / Dark crossfade on hover */}
-      <motion.div
-        className="absolute inset-0 bg-linear-to-b from-white to-gray-50"
-        animate={{ opacity: hovered ? 0 : 1 }}
-        transition={{ duration: 0.5 }}
-      />
-      <motion.div
-        className="absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(1200px at 50% 40%, #0b1323 0%, #020617 60%)',
-        }}
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.6 }}
-      />
+    <motion.section
+      animate={bgControls}
+      className="relative min-h-[88vh] overflow-hidden transition-colors"
+    >
+      {/* Navbar (fully synced with hero bg) */}
+      <header className="fixed top-0 w-full z-50 bg-transparent">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="text-2xl font-semibold tracking-tight">Sylo</div>
+          <nav className="hidden md:flex space-x-8">
+            {['Services', 'Process', 'Contact'].map((label) => (
+              <a
+                key={label}
+                href={`#${label.toLowerCase()}`}
+                className={`transition-colors duration-500 ${
+                  hovered
+                    ? 'hover:text-teal-300 text-gray-100'
+                    : 'hover:text-teal-600 text-gray-900'
+                }`}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      {/* Overlay tint */}
       <motion.div
         className="pointer-events-none absolute inset-0 bg-teal-400 mix-blend-soft-light"
         animate={{ opacity: hovered ? 0.18 : 0 }}
-        transition={{ duration: 0.45 }}
+        transition={{ duration: 0.45, ease: 'easeInOut' }}
       />
 
       <div className="relative z-10 pt-24 min-h-[88vh] flex items-center justify-center">
@@ -46,27 +68,33 @@ export default function Hero() {
           {/* Copy */}
           <div className="text-center md:text-left">
             {lines.map((text, i) => (
-              <motion.h1
-                key={text}
-                initial={{ opacity: 0, y: 40 }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  color: hovered ? '#e6fffb' : '#0f172a',
-                }}
-                transition={{ delay: 0.15 * i, duration: 0.7, ease: 'easeOut' }}
-                className="font-display text-5xl md:text-7xl font-black leading-tight tracking-tight"
-              >
-                {text}
-              </motion.h1>
-            ))}
+  <motion.h1
+    key={text}
+    initial={{ opacity: 0, y: 40 }}
+    animate={{
+      opacity: 1,
+      y: 0,
+    }}
+    transition={{ delay: 0.15 * i, duration: 0.7, ease: 'easeOut' }}
+    className="font-display text-5xl md:text-7xl font-black leading-tight tracking-tight"
+  >
+    <motion.span
+      animate={{
+        color: hovered ? '#e6fffb' : '#0f172a',
+      }}
+      transition={{ duration: 0.6, ease: 'easeInOut' }}
+    >
+      {text}
+    </motion.span>
+  </motion.h1>
+))}
 
             <motion.p
               initial={{ opacity: 0, y: 24 }}
               animate={{
                 opacity: 1,
                 y: 0,
-                color: hovered ? 'rgba(226, 232, 240, 0.9)' : '#475569',
+                color: hovered ? 'rgba(226,232,240,0.9)' : '#475569',
               }}
               transition={{ delay: 0.55, duration: 0.6 }}
               className="mt-6 text-base md:text-lg max-w-lg mx-auto md:mx-0"
@@ -86,9 +114,9 @@ export default function Hero() {
             </motion.a>
           </div>
 
-          {/* Orb + subtle HUD details (your orb untouched) */}
+          {/* Orb + Decorative HUD */}
           <div className="relative flex justify-center items-center">
-            {/* --- Decorative: concentric rings behind the orb --- */}
+            {/* Decorative Rings */}
             <svg
               width="440"
               height="440"
@@ -96,7 +124,6 @@ export default function Hero() {
               className="pointer-events-none absolute -z-10"
               style={{ opacity: hovered ? 0.85 : 0.4 }}
             >
-              {/* Outer dashed */}
               <circle
                 cx="220"
                 cy="220"
@@ -107,7 +134,6 @@ export default function Hero() {
                 strokeDasharray="6 10"
                 strokeOpacity="0.7"
               />
-              {/* Mid dotted */}
               <circle
                 cx="220"
                 cy="220"
@@ -118,7 +144,6 @@ export default function Hero() {
                 strokeDasharray="2 8"
                 strokeOpacity="0.6"
               />
-              {/* Inner thin */}
               <circle
                 cx="220"
                 cy="220"
@@ -130,7 +155,7 @@ export default function Hero() {
               />
             </svg>
 
-            {/* Rotating tick ring (kept) */}
+            {/* Rotating tick ring */}
             <motion.div
               className="absolute"
               animate={ticks}
@@ -150,13 +175,13 @@ export default function Hero() {
               ))}
             </motion.div>
 
-            {/* --- corner brackets for a subtle “targeting” feel --- */}
+            {/* Corner brackets */}
             <CornerBracket side="tl" active={hovered} />
             <CornerBracket side="tr" active={hovered} />
             <CornerBracket side="bl" active={hovered} />
             <CornerBracket side="br" active={hovered} />
 
-            {/* Orb (unchanged behavior) */}
+            {/* Orb */}
             <motion.div
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}
@@ -199,7 +224,7 @@ export default function Hero() {
               </span>
             </motion.div>
 
-            {/* --- small metric chips that “make sense” for a dev agency --- */}
+            {/* Metrics */}
             <motion.div
               className="absolute -top-7 left-8"
               initial={{ opacity: 0, y: -6 }}
@@ -208,7 +233,6 @@ export default function Hero() {
             >
               <Pill label="Lighthouse" value="98" active={hovered} />
             </motion.div>
-
             <motion.div
               className="absolute top-10 -right-4"
               initial={{ opacity: 0, x: 6 }}
@@ -217,7 +241,6 @@ export default function Hero() {
             >
               <Pill label="Core Web Vitals" value="Pass" active={hovered} />
             </motion.div>
-
             <motion.div
               className="absolute -bottom-5 right-10"
               initial={{ opacity: 0, y: 6 }}
@@ -250,12 +273,11 @@ export default function Hero() {
           </span>
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
-/* ---------- tiny presentational helpers (used around the orb) ---------- */
-
+/* ---------- HUD Helpers ---------- */
 function Pill({
   label,
   value,
@@ -300,13 +322,14 @@ function Pill({
   );
 }
 
-/**
- * Four minimal “corner brackets” around the orb area.
- * side: tl | tr | bl | br
- */
-function CornerBracket({ side, active }: { side: 'tl' | 'tr' | 'bl' | 'br'; active: boolean }) {
-  const base =
-    'pointer-events-none absolute h-8 w-8 opacity-60 md:opacity-70';
+function CornerBracket({
+  side,
+  active,
+}: {
+  side: 'tl' | 'tr' | 'bl' | 'br';
+  active: boolean;
+}) {
+  const base = 'pointer-events-none absolute h-8 w-8 opacity-60 md:opacity-70';
   const color = active ? 'border-teal-300' : 'border-slate-300';
   const pos =
     side === 'tl'
@@ -316,7 +339,6 @@ function CornerBracket({ side, active }: { side: 'tl' | 'tr' | 'bl' | 'br'; acti
       : side === 'bl'
       ? '-bottom-8 -left-8'
       : '-bottom-8 -right-8';
-
   const borders =
     side === 'tl'
       ? 'border-t border-l rounded-tl-lg'
@@ -325,6 +347,5 @@ function CornerBracket({ side, active }: { side: 'tl' | 'tr' | 'bl' | 'br'; acti
       : side === 'bl'
       ? 'border-b border-l rounded-bl-lg'
       : 'border-b border-r rounded-br-lg';
-
   return <div className={`${base} ${pos} ${color} ${borders}`} />;
 }
