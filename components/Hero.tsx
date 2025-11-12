@@ -6,7 +6,7 @@ import { motion, useAnimation } from 'framer-motion';
 export default function Hero() {
   const [hovered, setHovered] = useState(false);
   const ticks = useAnimation();
-  const bgControls = useAnimation(); // shared animation for navbar + bg
+  const bgControls = useAnimation();
 
   useEffect(() => {
     ticks.start({
@@ -17,10 +17,9 @@ export default function Hero() {
 
   useEffect(() => {
     bgControls.start({
-      background:
-        hovered
-          ? 'radial-gradient(1200px at 50% 40%, #0b1323 0%, #020617 60%)'
-          : 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)',
+      background: hovered
+        ? 'radial-gradient(1200px at 50% 40%, #0b1323 0%, #020617 60%)'
+        : 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)',
       color: hovered ? '#ffffff' : '#0f172a',
       transition: { duration: 0.6, ease: 'easeInOut' },
     });
@@ -34,23 +33,31 @@ export default function Hero() {
       animate={bgControls}
       className="relative min-h-[88vh] overflow-hidden transition-colors"
     >
-      {/* Navbar (fully synced with hero bg) */}
-      <header className="fixed top-0 w-full z-50 bg-transparent">
+      {/* Navbar */}
+      <header className="absolute top-0 w-full z-50 bg-transparent">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="text-2xl font-semibold tracking-tight">Sylo</div>
+          <motion.div
+            animate={{ color: hovered ? '#ffffff' : '#0f172a' }}
+            transition={{ duration: 0.6, ease: 'easeInOut' }}
+            className="text-2xl font-semibold tracking-tight"
+          >
+            Sylo
+          </motion.div>
+
           <nav className="hidden md:flex space-x-8">
             {['Services', 'Process', 'Contact'].map((label) => (
-              <a
+              <motion.a
                 key={label}
                 href={`#${label.toLowerCase()}`}
-                className={`transition-colors duration-500 ${
-                  hovered
-                    ? 'hover:text-teal-300 text-gray-100'
-                    : 'hover:text-teal-600 text-gray-900'
-                }`}
+                animate={{ color: hovered ? '#f1f5f9' : '#0f172a' }}
+                whileHover={{
+                  color: hovered ? '#5eead4' : '#0d9488',
+                }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+                className="transition-colors"
               >
                 {label}
-              </a>
+              </motion.a>
             ))}
           </nav>
         </div>
@@ -65,38 +72,30 @@ export default function Hero() {
 
       <div className="relative z-10 pt-24 min-h-[88vh] flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
-          {/* Copy */}
+          {/* Text column */}
           <div className="text-center md:text-left">
-            {lines.map((text, i) => (
-  <motion.h1
-    key={text}
-    initial={{ opacity: 0, y: 40 }}
-    animate={{
-      opacity: 1,
-      y: 0,
-    }}
-    transition={{ delay: 0.15 * i, duration: 0.7, ease: 'easeOut' }}
-    className="font-display text-5xl md:text-7xl font-black leading-tight tracking-tight"
-  >
-    <motion.span
-      animate={{
-        color: hovered ? '#e6fffb' : '#0f172a',
-      }}
-      transition={{ duration: 0.6, ease: 'easeInOut' }}
-    >
-      {text}
-    </motion.span>
-  </motion.h1>
-))}
+            {lines.map((text) => (
+              <motion.h1
+                key={text}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: 'easeOut' }}
+                className="font-display text-5xl md:text-7xl font-black leading-tight tracking-tight"
+              >
+                <motion.span
+                  animate={{ color: hovered ? '#e6fffb' : '#0f172a' }}
+                  transition={{ duration: 0.6, ease: 'easeInOut' }}
+                >
+                  {text}
+                </motion.span>
+              </motion.h1>
+            ))}
 
             <motion.p
-              initial={{ opacity: 0, y: 24 }}
               animate={{
-                opacity: 1,
-                y: 0,
                 color: hovered ? 'rgba(226,232,240,0.9)' : '#475569',
               }}
-              transition={{ delay: 0.55, duration: 0.6 }}
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
               className="mt-6 text-base md:text-lg max-w-lg mx-auto md:mx-0"
             >
               We build immersive, high-performance sites where motion,
@@ -105,18 +104,19 @@ export default function Hero() {
 
             <motion.a
               href="#contact"
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.75, duration: 0.6 }}
+              whileHover={{
+                backgroundColor: hovered ? '#14b8a6' : '#0d9488',
+              }}
+              transition={{ duration: 0.3 }}
               className="inline-block mt-8 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-7 rounded-full shadow-lg transition-colors"
             >
               Get Started
             </motion.a>
           </div>
 
-          {/* Orb + Decorative HUD */}
+          {/* Orb + HUD */}
           <div className="relative flex justify-center items-center">
-            {/* Decorative Rings */}
+            {/* Rings */}
             <svg
               width="440"
               height="440"
@@ -155,7 +155,7 @@ export default function Hero() {
               />
             </svg>
 
-            {/* Rotating tick ring */}
+            {/* Rotating ticks */}
             <motion.div
               className="absolute"
               animate={ticks}
@@ -175,7 +175,7 @@ export default function Hero() {
               ))}
             </motion.div>
 
-            {/* Corner brackets */}
+            {/* Corners */}
             <CornerBracket side="tl" active={hovered} />
             <CornerBracket side="tr" active={hovered} />
             <CornerBracket side="bl" active={hovered} />
@@ -219,59 +219,41 @@ export default function Hero() {
                 }}
                 transition={{ duration: 1.4, repeat: hovered ? Infinity : 0 }}
               />
-              <span className="relative z-10 text-sm font-mono uppercase tracking-widest text-slate-800">
+              <motion.span
+                animate={{
+                  color: hovered ? '#e0f2f1' : '#0f172a',
+                }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+                className="relative z-10 text-sm font-mono uppercase tracking-widest"
+              >
                 hover over me
-              </span>
+              </motion.span>
             </motion.div>
 
-            {/* Metrics */}
+            {/* Small metric pills (fade synced) */}
             <motion.div
               className="absolute -top-7 left-8"
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: hovered ? 1 : 0.75, y: hovered ? 0 : -2 }}
-              transition={{ duration: 0.3 }}
+              animate={{ opacity: hovered ? 1 : 0.75 }}
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
             >
               <Pill label="Lighthouse" value="98" active={hovered} />
             </motion.div>
             <motion.div
               className="absolute top-10 -right-4"
-              initial={{ opacity: 0, x: 6 }}
-              animate={{ opacity: hovered ? 1 : 0.75, x: hovered ? 0 : 2 }}
-              transition={{ duration: 0.3, delay: 0.05 }}
+              animate={{ opacity: hovered ? 1 : 0.75 }}
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
             >
               <Pill label="Core Web Vitals" value="Pass" active={hovered} />
             </motion.div>
             <motion.div
               className="absolute -bottom-5 right-10"
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: hovered ? 1 : 0.75, y: hovered ? 0 : 2 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
+              animate={{ opacity: hovered ? 1 : 0.75 }}
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
             >
               <Pill label="WCAG" value="AA" active={hovered} />
             </motion.div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className={`w-0.5 h-5 ${hovered ? 'bg-teal-300' : 'bg-slate-400'}`}
-          />
-          <span
-            className={`text-xs font-mono tracking-widest ${
-              hovered ? 'text-slate-200' : 'text-slate-400'
-            }`}
-          >
-            SCROLL
-          </span>
-        </motion.div>
       </div>
     </motion.section>
   );
@@ -288,37 +270,23 @@ function Pill({
   active: boolean;
 }) {
   return (
-    <div
-      className={[
-        'flex items-center gap-2 rounded-full px-3 py-1.5 shadow-sm border backdrop-blur',
-        active
-          ? 'bg-white/85 border-teal-300/60'
-          : 'bg-white/70 border-slate-300/60',
-      ].join(' ')}
+    <motion.div
+      animate={{
+        backgroundColor: active ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.7)',
+        borderColor: active ? 'rgba(94,234,212,0.6)' : 'rgba(203,213,225,0.6)',
+        color: active ? '#0f172a' : '#334155',
+      }}
+      transition={{ duration: 0.6, ease: 'easeInOut' }}
+      className="flex items-center gap-2 rounded-full px-3 py-1.5 shadow-sm border backdrop-blur"
     >
-      <span
-        className={[
-          'h-1.5 w-1.5 rounded-full',
-          active ? 'bg-teal-500' : 'bg-slate-400',
-        ].join(' ')}
+      <motion.span
+        animate={{ backgroundColor: active ? '#14b8a6' : '#94a3b8' }}
+        transition={{ duration: 0.6, ease: 'easeInOut' }}
+        className="h-1.5 w-1.5 rounded-full"
       />
-      <span
-        className={[
-          'font-mono text-[11px]',
-          active ? 'text-slate-600' : 'text-slate-500',
-        ].join(' ')}
-      >
-        {label}
-      </span>
-      <span
-        className={[
-          'text-[12px] font-semibold',
-          active ? 'text-slate-800' : 'text-slate-700',
-        ].join(' ')}
-      >
-        {value}
-      </span>
-    </div>
+      <span className="font-mono text-[11px]">{label}</span>
+      <span className="text-[12px] font-semibold">{value}</span>
+    </motion.div>
   );
 }
 
