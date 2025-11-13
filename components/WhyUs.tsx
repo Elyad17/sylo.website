@@ -1,130 +1,169 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useMemo, useRef } from 'react';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { Playfair_Display, Manrope, IBM_Plex_Mono } from 'next/font/google';
 
+/* ============================== FONTS ============================== */
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '700'] });
 const manrope = Manrope({ subsets: ['latin'], weight: ['700', '800'] });
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '600'] });
 
-export default function WhyUs() {
-  const wrapRef = useRef<HTMLDivElement>(null);
+/* ============================== THEME ============================== */
+const ORANGE = '#FF6A00';
+const MINT = '#22D3A6';
 
-  // subtle section skew/fade
-  const { scrollYProgress } = useScroll({ target: wrapRef, offset: ['start end', 'end start'] });
-  const skew = useTransform(scrollYProgress, [0, 1], [0, -6]);
-  const fade = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+/* ======== Helper: satisfy Framer’s template-literal offset type ======== */
+type FramerOffset = NonNullable<Parameters<typeof useScroll>[0]>['offset'];
+const asFramerOffset = (t: readonly [string, string]) => t as unknown as FramerOffset;
 
-  // card motion
-  const cardRotate = useTransform(scrollYProgress, [0, 1], [-1.8, -4]);
-  const cardY = useTransform(scrollYProgress, [0, 1], [0, -6]);
+/* ---------- Single bullet row with bar segment + label ---------- */
+interface BulletRowProps {
+  label: string;
+}
+
+const BulletRow: React.FC<BulletRowProps> = ({ label }) => {
+  const liRef = useRef<HTMLLIElement | null>(null);
+
+  // This single flag controls BOTH the label and the bar segment
+  const inView = useInView(liRef, {
+    amount: 0.55,
+    margin: '0px 0px -20% 0px',
+  });
 
   return (
-    <section id="why-us" className="relative min-h-[120vh] w-full overflow-hidden bg-white text-neutral-900">
-      {/* monochrome sheen keyframes */}
-      <style jsx global>{`
-        @keyframes monoSheen {
-          0% {
-            background-position: 200% 0;
-          }
-          100% {
-            background-position: -200% 0;
-          }
-        }
-      `}</style>
+    <li ref={liRef} className="flex items-center gap-4">
+      {/* bar segment that lines up exactly with this word */}
+      <motion.div
+        initial={{ opacity: 0, scaleY: 0.4 }}
+        animate={{ opacity: inView ? 1 : 0, scaleY: inView ? 1 : 0.4 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        className="h-[42px] w-[6px] origin-center flex-shrink-0 rounded-full"
+        style={{
+          background: `linear-gradient(180deg, ${MINT}, ${MINT}CC)`,
+          boxShadow: inView ? '0 8px 24px rgba(34,211,166,0.35)' : 'none',
+        }}
+      />
 
-      <div ref={wrapRef} className="relative mx-auto max-w-[1400px] px-6 py-[12vh]">
+      {/* label – driven by the SAME inView flag */}
+      <motion.span
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 8 }}
+        transition={{ duration: 0.28, ease: 'easeOut' }}
+        className={`${manrope.className} block select-none text-[22px] md:text-[28px] font-extrabold tracking-[-0.02em] text-slate-900`}
+      >
+        {label}
+      </motion.span>
+    </li>
+  );
+};
+
+/* =============================== MAIN =============================== */
+export default function WhyUs() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Subtle transform for the hero block
+  const HERO_OFFSET = asFramerOffset(['start end', 'end start']);
+  const { scrollYProgress: heroProg } = useScroll({ target: heroRef, offset: HERO_OFFSET });
+  const skew = useTransform(heroProg, [0, 1], [0, -6]);
+  const fade = useTransform(heroProg, [0, 1], [1, 0.94]);
+
+  const words = useMemo(
+    () => ['Design', 'Animation', 'SEO', 'Performance', 'CRO', 'CMS', 'Support'],
+    []
+  );
+
+  return (
+    <section id="why-us" className="relative w-full overflow-hidden bg-white text-slate-900">
+      <div ref={heroRef} className="relative mx-auto max-w-[1400px] px-6 py-[12vh]">
+        {/* ===================== HERO ===================== */}
         <motion.div style={{ skewY: skew, opacity: fade }} className="relative">
-          {/* Huge title */}
-          <motion.h2
-            initial={{ y: 40, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
-            className={`${manrope.className} relative z-10 select-none text-[22vw] leading-[0.75] font-extrabold tracking-[-0.065em]`}
-          >
-            Your
-            <span className="block">BRAND</span>
-          </motion.h2>
+          <div className="relative">
+            {/* DIGITAL */}
+            <div className="relative w-fit">
+              <span
+                className={`${manrope.className} block select-none text-[15vw] leading-[0.82] font-extrabold tracking-[-0.055em]`}
+              >
+                <span className="relative inline-block">
+                  <span
+                    className="relative"
+                    style={{
+                      background:
+                        'linear-gradient(180deg, rgba(15,23,42,1), rgba(15,23,42,0.9))',
+                      WebkitBackgroundClip: 'text',
+                      color: 'transparent',
+                    }}
+                  >
+                    Digital
+                  </span>
+                </span>
+              </span>
+            </div>
 
-          {/* serif accent */}
+            {/* PRESENCE */}
+            <div
+              className={`${manrope.className} mt-[1.6vw] select-none text-[16.5vw] leading-[0.84] font-extrabold tracking-[-0.055em] text-[#0f1b31] relative w-fit`}
+            >
+              <span className="block">PRESENCE</span>
+            </div>
+          </div>
+
+          {/* why us? */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.7 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className={`${playfair.className} pointer-events-none absolute right-[10%] top-[14%] z-20 rotate-[-6deg] text-[7vw] italic`}
+            transition={{ duration: 0.45 }}
+            className={`${playfair.className} pointer-events-none absolute right-[15%] top-[6%] z-10 -rotate-6 text-[6vw] italic text-slate-800/85`}
           >
             why&nbsp;us?
           </motion.div>
 
-          {/* CHIP — monochrome “YOU FIRST” with metallic sheen + underline */}
+          {/* chip */}
           <motion.span
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -6 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.7 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
-            className={`${mono.className} absolute right-0 top-[46%] z-20 rounded-md bg-black/95 px-4 py-2 text-[0.9rem] text-white shadow-md`}
+            transition={{ duration: 0.45, delay: 0.12 }}
+            className={`${mono.className} absolute right-[12.2%] top-[18.6%] z-20 inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white/95 px-4 py-2 text-[0.9rem] text-slate-800 shadow-[0_10px_30px_rgba(2,6,23,0.06)] backdrop-blur -rotate-6`}
           >
-            *because we put{' '}
-            <span className="relative inline-block font-extrabold uppercase tracking-wide leading-none">
-              {/* metallic grayscale sheen (no colors) */}
-              <span
-                className="bg-[linear-gradient(90deg,#ffffff_0%,#e7e7e7_35%,#ffffff_70%)] bg-clip-text text-transparent"
-                style={{
-                  backgroundSize: '200% 100%',
-                  animation: 'monoSheen 3s linear infinite',
-                }}
-              >
-                YOU&nbsp;FIRST
-              </span>
-              {/* subtle underline that draws in */}
-              <motion.span
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true, amount: 0.7 }}
-                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
-                className="absolute left-0 -bottom-0.5 h-[2px] w-full origin-left rounded-full bg-white/90"
-              />
+            <span>*because we put</span>
+            <span
+              className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold text-white"
+              style={{
+                backgroundColor: ORANGE,
+                boxShadow: '0 8px 20px rgba(255,106,0,0.35)',
+                letterSpacing: '0.04em',
+              }}
+            >
+              YOU&nbsp;FIRST
             </span>
           </motion.span>
 
-          {/* ===== GUARANTEE CARD (centered headline, keeps label, rotates on scroll) ===== */}
-          <motion.div
-            style={{ rotate: cardRotate, y: cardY }}
-            initial={{ opacity: 0, scale: 0.985 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.6 }}
-            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.1 }}
-            className="relative mt-[6vh] max-w-3xl"
-          >
-            <div className="relative w-full overflow-hidden rounded-xl border border-neutral-200/80 bg-white/95 shadow-[0_8px_30px_rgba(0,0,0,0.06)] backdrop-blur">
-              <div className="relative h-[130px]">
-                {/* label pinned to top */}
-                <span
-                  className={`${mono.className} pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 text-[11px] uppercase tracking-[0.25em] text-neutral-400`}
+          {/* ===================== WHAT WE OFFER ===================== */}
+          <div className="relative mt-[8.2vh] md:mt-[8.8vh]">
+            <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-[0.92fr_1.08fr]">
+              {/* left heading */}
+              <div className="flex items-start md:justify-end">
+                <h3
+                  className={`${manrope.className} text-[9.2vw] leading-[0.9] md:text-[4.6vw] md:leading-[0.9] font-extrabold tracking-[-0.045em] text-slate-900 text-left md:text-right`}
                 >
-                  Not happy?
-                </span>
+                  What
+                  <br className="hidden md:block" />
+                  we&nbsp;offer
+                </h3>
+              </div>
 
-                {/* headline perfectly centered */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="flex flex-wrap items-baseline justify-center gap-3 text-center">
-                    <span className={`${manrope.className} text-[34px] font-extrabold leading-none`}>
-                      100% MONEY-BACK
-                    </span>
-                    <span
-                      className={`${manrope.className} text-[30px] font-extrabold leading-none text-transparent [-webkit-text-stroke:1.5px] [-webkit-text-stroke-color:#0a0a0a]`}
-                    >
-                      GUARANTEE
-                    </span>
-                  </div>
-                </div>
+              {/* right: list with perfectly synced segments */}
+              <div className="relative">
+                <ul className="flex flex-col gap-4">
+                  {words.map((label) => (
+                    <BulletRow key={label} label={label} />
+                  ))}
+                </ul>
               </div>
             </div>
-          </motion.div>
-          {/* ===== /GUARANTEE CARD ===== */}
+          </div>
         </motion.div>
       </div>
     </section>
