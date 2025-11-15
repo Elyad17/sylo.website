@@ -1,8 +1,4 @@
-import Hero from '../components/Hero';
-import WhyUs from '../components/WhyUs';
-import Process from '../components/Process';
-import Contact from '../components/Contact';
-import Footer from '../components/Footer';
+import HomeClient from './HomeClient';
 
 export const metadata = {
   title: 'Sylo – Innovative Web Solutions',
@@ -11,13 +7,5 @@ export const metadata = {
 };
 
 export default function HomePage() {
-  return (
-    <>
-      <Hero />
-      <WhyUs />
-      <Process />
-      <Contact />
-      <Footer />
-    </>
-  );
+  return <HomeClient />;
 }

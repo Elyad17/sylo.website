@@ -1,17 +1,26 @@
 'use client';
-import { createContext, useContext, useState } from 'react';
 
-const HeroContext = createContext<any>(null);
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-export function HeroProvider({ children }: { children: React.ReactNode }) {
+type HeroHoverContextValue = {
+  hovered: boolean;
+  setHovered: (value: boolean) => void;
+};
+
+const HeroHoverContext = createContext<HeroHoverContextValue | null>(null);
+
+export function HeroHoverProvider({ children }: { children: ReactNode }) {
   const [hovered, setHovered] = useState(false);
+
   return (
-    <HeroContext.Provider value={{ hovered, setHovered }}>
+    <HeroHoverContext.Provider value={{ hovered, setHovered }}>
       {children}
-    </HeroContext.Provider>
+    </HeroHoverContext.Provider>
   );
 }
 
-export function useHero() {
-  return useContext(HeroContext);
+export function useHeroHover() {
+  const ctx = useContext(HeroHoverContext);
+  if (!ctx) throw new Error('useHeroHover must be used inside HeroHoverProvider');
+  return ctx;
 }
