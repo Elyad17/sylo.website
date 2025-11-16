@@ -71,7 +71,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
 
   return (
     <section id="why-us" className="relative w-full overflow-hidden">
-      {/* light background – now same as hero default */}
+      {/* light background – same as hero default */}
       <motion.div
         className="absolute inset-0 -z-10"
         style={{ backgroundColor: '#f8fafc' }}

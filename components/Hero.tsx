@@ -24,31 +24,23 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
 
   return (
     <section className="relative min-h-[88vh] overflow-hidden">
-      {/* LIGHT background */}
+      {/* LIGHT background – same as WhyUs default */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 -z-10"
         style={{
-          background: 'linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%)',
+          backgroundColor: '#f8fafc',
         }}
         animate={{ opacity: hovered ? 0 : 1 }}
         transition={HOVER_TRANSITION}
       />
 
-      {/* DARK background */}
+      {/* DARK background – same as WhyUs hovered */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 -z-10"
         style={{
-          background:
-            'radial-gradient(1200px at 50% 40%, #0b1323 0%, #020617 60%)',
+          backgroundColor: '#020617',
         }}
         animate={{ opacity: hovered ? 1 : 0 }}
-        transition={HOVER_TRANSITION}
-      />
-
-      {/* Extra teal glow overlay */}
-      <motion.div
-        className="pointer-events-none absolute inset-0 bg-teal-400 mix-blend-soft-light"
-        animate={{ opacity: hovered ? 0.18 : 0 }}
         transition={HOVER_TRANSITION}
       />
 
@@ -183,7 +175,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                       height: i % 6 === 0 ? 10 : 6,
                       backgroundColor: hovered ? '#94a3b8' : '#cbd5e1',
                       transform: `rotate(${i * 10}deg) translateY(-${
-                        hovered ? 145 : 115
+                        hovered ? ringRadius : ringRadius
                       }px)`,
                       opacity: i % 2 === 0 ? 0.85 : 0.55,
                     }}
