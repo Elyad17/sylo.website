@@ -9,7 +9,6 @@ const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '700'] }
 const manrope = Manrope({ subsets: ['latin'], weight: ['700', '800'] });
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '600'] });
 
-const ACCENT_BLUE = '#2563eb';
 const ORANGE = '#FF6A00';
 
 type FramerOffset = NonNullable<Parameters<typeof useScroll>[0]>['offset'];
@@ -72,17 +71,17 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
 
   return (
     <section id="why-us" className="relative w-full overflow-hidden">
-      {/* light background */}
+      {/* light background – now same as hero default */}
       <motion.div
-        className="absolute inset-0"
-        style={{ backgroundColor: '#f4f4f5' }}
+        className="absolute inset-0 -z-10"
+        style={{ backgroundColor: '#f8fafc' }}
         animate={{ opacity: heroHovered ? 0 : 1 }}
         transition={HOVER_TRANSITION}
       />
 
-      {/* dark background */}
+      {/* dark background – same as hero hovered */}
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 -z-10"
         style={{ backgroundColor: '#020617' }}
         animate={{ opacity: heroHovered ? 1 : 0 }}
         transition={HOVER_TRANSITION}
@@ -93,37 +92,34 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
         className="relative mx-auto max-w-[1400px] px-6 py-[12vh]"
       >
         <motion.div style={{ skewY: skew, opacity: fade }} className="relative">
+          {/* DIGITAL / PRESENCE headline */}
           <div className="relative">
+            {/* DIGITAL with glitch */}
             <div className="relative w-fit">
-              <motion.span
+              <motion.h1
                 className={`${manrope.className} block select-none leading-[0.85] font-extrabold tracking-[-0.06em] text-[13vw] md:text-[8.2vw]`}
                 animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
                 transition={HOVER_TRANSITION}
               >
-                <span className="relative inline-block">
-                  <span>Dig</span>
-                  <motion.span
-                    transition={HOVER_TRANSITION}
-                    animate={{
-                      color: heroHovered ? '#93c5fd' : ACCENT_BLUE,
-                    }}
-                    style={{ marginLeft: '0.04em' }}
-                  >
-                    ital
-                  </motion.span>
+                <span className="digital-glitch" data-text="DIGITAL">
+                  DIGITAL
                 </span>
-              </motion.span>
+              </motion.h1>
             </div>
 
+            {/* PRESENCE with glitch */}
             <motion.div
               className={`${manrope.className} mt-[1.4vw] select-none leading-[0.86] font-extrabold tracking-[-0.07em] text-[17vw] md:text-[10.6vw] relative w-fit`}
               animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
               transition={HOVER_TRANSITION}
             >
-              <span className="block">PRESENCE</span>
+              <span className="digital-glitch block" data-text="PRESENCE">
+                PRESENCE
+              </span>
             </motion.div>
           </div>
 
+          {/* "why us?" label */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -141,6 +137,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
             why&nbsp;us?
           </motion.div>
 
+          {/* chip */}
           <motion.span
             initial={{ opacity: 0, y: -6 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -182,6 +179,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
             </motion.span>
           </motion.span>
 
+          {/* What we offer + bullets */}
           <div className="relative mt-[8.2vh] md:mt-[8.8vh]">
             <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-[0.92fr_1.08fr]">
               <div className="flex items-start md:justify-end">

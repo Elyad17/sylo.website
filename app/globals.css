@@ -6,14 +6,17 @@
   --sylo-tracking-tight: -0.02em;
 }
 
-html, body {
+html,
+body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 /* Default headings letter-spacing */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   letter-spacing: var(--sylo-tracking-tight);
 }
 
@@ -22,4 +25,77 @@ h1, h2, h3 {
   :root {
     color-scheme: dark;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* DIGITAL word – clean “slice” glitch (GLITCHEFFECT-style)           */
+/* ------------------------------------------------------------------ */
+
+.digital-glitch {
+  position: relative;
+  display: inline-block;
+  color: inherit;          /* use whatever color the heading has */
+}
+
+/* two overlay slices, same color as the base word */
+.digital-glitch::before,
+.digital-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: currentColor;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* top slice */
+.digital-glitch::before {
+  clip-path: polygon(0 0, 100% 0, 100% 52%, 0 52%);
+  animation: digital-glitch-top 2300ms steps(18, end) infinite;
+}
+
+/* bottom slice */
+.digital-glitch::after {
+  clip-path: polygon(0 48%, 100% 48%, 100% 100%, 0 100%);
+  animation: digital-glitch-bottom 2100ms steps(18, end) infinite;
+}
+
+/* top slice motion – short, jittery horizontal jumps */
+@keyframes digital-glitch-top {
+  0%   { transform: translate3d(0, 0, 0); }
+  4%   { transform: translate3d(-3px, -1px, 0); }
+  8%   { transform: translate3d(2px, 1px, 0); }
+  12%  { transform: translate3d(-4px, 0, 0); }
+  16%  { transform: translate3d(3px, -2px, 0); }
+  20%  { transform: translate3d(0, 0, 0); }
+  30%  { transform: translate3d(-2px, 2px, 0); }
+  36%  { transform: translate3d(2px, -1px, 0); }
+  42%  { transform: translate3d(0, 1px, 0); }
+  48%  { transform: translate3d(-3px, 0, 0); }
+  54%  { transform: translate3d(3px, -1px, 0); }
+  60%  { transform: translate3d(0, 0, 0); }
+  70%  { transform: translate3d(-1px, 1px, 0); }
+  80%  { transform: translate3d(2px, 0, 0); }
+  90%  { transform: translate3d(-2px, -1px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* bottom slice motion – offset timing so it feels constant */
+@keyframes digital-glitch-bottom {
+  0%   { transform: translate3d(0, 0, 0); }
+  4%   { transform: translate3d(3px, 1px, 0); }
+  8%   { transform: translate3d(-2px, -1px, 0); }
+  12%  { transform: translate3d(4px, 0, 0); }
+  16%  { transform: translate3d(-3px, 2px, 0); }
+  20%  { transform: translate3d(0, 0, 0); }
+  30%  { transform: translate3d(2px, -2px, 0); }
+  36%  { transform: translate3d(-2px, 1px, 0); }
+  42%  { transform: translate3d(0, -1px, 0); }
+  48%  { transform: translate3d(3px, 0, 0); }
+  54%  { transform: translate3d(-3px, 1px, 0); }
+  60%  { transform: translate3d(0, 0, 0); }
+  70%  { transform: translate3d(1px, -1px, 0); }
+  80%  { transform: translate3d(-2px, 0, 0); }
+  90%  { transform: translate3d(2px, 1px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
