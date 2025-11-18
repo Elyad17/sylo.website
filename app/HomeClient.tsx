@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import Hero from '../components/Hero';
 import WhyUs from '../components/WhyUs';
-import Process from '../components/Process';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import { ProcessSection } from '@/components/process/ProcessSection';
 
 export default function HomeClient() {
   const [heroHovered, setHeroHovered] = useState(false);
@@ -14,8 +14,7 @@ export default function HomeClient() {
     <>
       <Hero hovered={heroHovered} setHovered={setHeroHovered} />
       <WhyUs heroHovered={heroHovered} />
-
-      <Process />
+      <ProcessSection />
       <Contact />
       <Footer />
     </>
