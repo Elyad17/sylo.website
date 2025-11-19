@@ -2,6 +2,7 @@
 
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { motion, useInView, useMotionValueEvent, useScroll } from 'framer-motion';
+import ScreenSplitTransition from './ScreenSplitTransition';
 
 type Actor = 'YOU' | 'US';
 
@@ -98,10 +99,18 @@ export function ProcessSection() {
   }, [lastStepMidScreen, completionProgress, progress]);
 
   const targetProgress = completionProgress ?? 1.05;
-  const normalizedProgress = Math.min(progress / targetProgress, 1);
+  const normalizedProgressRaw = progress / targetProgress;
+  const normalizedProgress = Math.min(normalizedProgressRaw, 1);
   const computedFill = normalizedProgress * 100;
   const barWidth = `${computedFill}%`;
   const progressPercent = useMemo(() => Math.round(computedFill), [computedFill]);
+
+  const transitionSpan = 0.08;
+  const extraProgress = completionProgress ? Math.max(progress - completionProgress, 0) : 0;
+  const overlayProgress = completionProgress
+    ? Math.min(extraProgress / transitionSpan, 1)
+    : 0;
+  const overlayActive = overlayProgress > 0;
 
   const handleVisible = useCallback((index: number) => {
     setFocusedIndex(index);
@@ -114,6 +123,7 @@ export function ProcessSection() {
       ref={sectionRef}
       className="bg-[#E9F0FF] py-24 text-slate-600"
     >
+      <ScreenSplitTransition active={overlayActive} progress={overlayProgress} />
       <div className="mx-auto max-w-5xl px-6 md:px-10">
         <div className="max-w-3xl space-y-4">
           <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl lg:text-5xl">
