@@ -41,27 +41,32 @@ export default function ScreenSplitTransition({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          {/* Closing view revealed from the center */}
           <motion.div
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none"
             style={{
               clipPath: `inset(${clipInset} 0 ${clipInset} 0)`,
+              WebkitClipPath: `inset(${clipInset} 0 ${clipInset} 0)`,
             }}
           >
-            <ClosingPage />
+            <div className="overflow-hidden h-full w-full">
+              <ClosingPage />
+            </div>
           </motion.div>
 
-          {/* Panels that mimic splitting the process surface */}
-          <div className="absolute inset-0 flex flex-col">
+          <div className="pointer-events-none absolute inset-0 flex flex-col">
             <motion.div
-              className="flex-1 bg-[#E9F0FF] shadow-[0_20px_50px_rgba(148,163,184,0.45)]"
+              className="flex-1"
               style={{
+                background: 'rgba(233,240,255,0.02)',
+                boxShadow: `0 30px 60px rgba(15,23,42,${0.35 * easedProgress}) inset`,
                 transform: `translateY(-${easedProgress * 100}%)`,
               }}
             />
             <motion.div
-              className="flex-1 bg-[#E9F0FF] shadow-[0_-20px_50px_rgba(148,163,184,0.45)]"
+              className="flex-1"
               style={{
+                background: 'rgba(233,240,255,0.02)',
+                boxShadow: `0 -30px 60px rgba(15,23,42,${0.35 * easedProgress}) inset`,
                 transform: `translateY(${easedProgress * 100}%)`,
               }}
             />
