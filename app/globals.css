@@ -52,12 +52,14 @@ h3 {
 .digital-glitch::before {
   clip-path: polygon(0 0, 100% 0, 100% 52%, 0 52%);
   animation: digital-glitch-top 2300ms steps(18, end) infinite;
+  animation-play-state: paused;
 }
 
 /* bottom slice */
 .digital-glitch::after {
   clip-path: polygon(0 48%, 100% 48%, 100% 100%, 0 100%);
   animation: digital-glitch-bottom 2100ms steps(18, end) infinite;
+  animation-play-state: paused;
 }
 
 /* top slice motion – short, jittery horizontal jumps */

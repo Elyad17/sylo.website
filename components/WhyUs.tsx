@@ -4,6 +4,7 @@ import React, { useMemo, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { Playfair_Display, Manrope, IBM_Plex_Mono } from 'next/font/google';
 import { HOVER_TRANSITION } from './hoverTheme';
+import Mascot from './Mascot';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '700'] });
 const manrope = Manrope({ subsets: ['latin'], weight: ['700', '800'] });
@@ -138,6 +139,9 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
           </motion.div>
 
           {/* chip */}
+          <div className="pointer-events-none absolute right-[-10%] top-[28%] z-10 translate-y-[22px] rotate-[10deg]">
+            <Mascot className="h-[1px] w-[1px] origin-top-left scale-[0.15]" />
+          </div>
           <motion.span
             initial={{ opacity: 0, y: -6 }}
             whileInView={{ opacity: 1, y: 0 }}
