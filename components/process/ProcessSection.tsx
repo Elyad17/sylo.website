@@ -1,13 +1,7 @@
 'use client';
 
 import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
-import {
-  motion,
-  useInView,
-  useMotionValueEvent,
-  useScroll,
-  useTransform,
-} from 'framer-motion';
+import { motion, useInView, useMotionValueEvent, useScroll } from 'framer-motion';
 
 type Actor = 'YOU' | 'US';
 
@@ -77,6 +71,7 @@ const ACCENTS: Record<
 
 export function ProcessSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const lastStepRef = useRef<HTMLDivElement | null>(null);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -85,14 +80,28 @@ export function ProcessSection() {
 
   const [progress, setProgress] = useState(0);
   const [focusedIndex, setFocusedIndex] = useState(0);
+  const [completionProgress, setCompletionProgress] = useState<number | null>(null);
+  const lastStepMidScreen = useInView(lastStepRef, {
+    amount: 0,
+    margin: '0px 0px -50% 0px',
+  });
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const next = Math.max(0, Math.min(1, latest));
     setProgress(next);
   });
 
-  const barWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
-  const progressPercent = useMemo(() => Math.round(progress * 100), [progress]);
+  useEffect(() => {
+    if (lastStepMidScreen && completionProgress === null) {
+      setCompletionProgress(progress);
+    }
+  }, [lastStepMidScreen, completionProgress, progress]);
+
+  const targetProgress = completionProgress ?? 1.05;
+  const normalizedProgress = Math.min(progress / targetProgress, 1);
+  const computedFill = normalizedProgress * 100;
+  const barWidth = `${computedFill}%`;
+  const progressPercent = useMemo(() => Math.round(computedFill), [computedFill]);
 
   const handleVisible = useCallback((index: number) => {
     setFocusedIndex(index);
@@ -144,6 +153,7 @@ export function ProcessSection() {
           ))}
         </div>
 
+        <div ref={lastStepRef} className="h-[55vh]" />
       </div>
     </section>
   );
