@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { HOVER_TRANSITION } from './hoverTheme';
 
@@ -11,6 +11,10 @@ type HeroProps = {
 
 export default function Hero({ hovered, setHovered }: HeroProps) {
   const ticks = useAnimation();
+  const typingText = 'scroll down';
+  const [visibleText, setVisibleText] = useState('');
+  const [eraseCount, setEraseCount] = useState(0);
+  const [mode, setMode] = useState<'typing' | 'erasing'>('typing');
 
   useEffect(() => {
     ticks.start({
@@ -19,8 +23,40 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
     });
   }, [ticks]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (mode === 'typing') {
+        setVisibleText((prev) => {
+          const nextLen = prev.length + 1;
+          if (nextLen >= typingText.length) {
+            setMode('erasing');
+            return typingText;
+          }
+          return typingText.slice(0, nextLen);
+        });
+      } else {
+        setEraseCount((prev) => {
+          const next = prev + 1;
+          if (next > typingText.length) {
+            setMode('typing');
+            setVisibleText('');
+            return 0;
+          }
+          return next;
+        });
+      }
+    }, 140);
+
+    return () => clearInterval(interval);
+  }, [mode, typingText.length]);
+
   const ringRadius = hovered ? 145 : 115;
-  const lines = ['WEBSITE DESIGN', 'THAT', 'STANDS OUT'];
+  const lines = [
+    { text: 'WEBSITES', align: 'text-center md:text-left md:-ml-6 lg:-ml-28' },
+    { text: 'THAT STAND', align: 'text-center md:text-left md:pl-0 lg:pl-2 whitespace-nowrap' },
+    { text: 'OUT', align: 'text-center md:text-left md:ml-90 lg:ml 120' },
+  ];
+  const chars = typingText.split('');
 
   return (
     <section className="relative min-h-[88vh] overflow-hidden">
@@ -28,7 +64,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
       <motion.div
         className="absolute inset-0 -z-10"
         style={{
-          backgroundColor: '#f8fafc',
+          backgroundColor: '#ffffff',
         }}
         animate={{ opacity: hovered ? 0 : 1 }}
         transition={HOVER_TRANSITION}
@@ -79,34 +115,72 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
         <div className="pt-24 min-h-[88vh] flex items-center justify-center">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
             {/* Text column */}
-            <div className="text-center md:text-left">
-              {lines.map((text) => (
-                <motion.h1
-                  key={text}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, ease: 'easeOut' }}
-                  className="font-display text-5xl md:text-7xl font-black leading-tight tracking-tight"
-                >
-                  <motion.span
-                    animate={{ color: hovered ? '#e6fffb' : '#0f172a' }}
-                    transition={HOVER_TRANSITION}
+            <div className="text-center md:text-left md:pl-2 lg:pl-6 xl:pl-10">
+              <div className="space-y-2 md:space-y-3 lg:space-y-4 md:max-w-5xl">
+                {lines.map((line, idx) => (
+                  <motion.h1
+                    key={line.text}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.7, ease: 'easeOut', delay: idx * 0.05 }}
+                    className={[
+                      "font-['Bree_Serif',_serif]",
+                      'text-[3.8rem] sm:text-[5rem] lg:text-[6.1rem] xl:text-[6.8rem]',
+                      'font-extrabold leading-[0.9] tracking-[-0.05em] uppercase',
+                      line.align,
+                    ].join(' ')}
                   >
-                    {text}
-                  </motion.span>
-                </motion.h1>
-              ))}
+                    <motion.span
+                      animate={{ color: hovered ? '#e6fffb' : '#0f172a' }}
+                      transition={HOVER_TRANSITION}
+                      className="block"
+                    >
+                      {line.text}
+                    </motion.span>
+                  </motion.h1>
+                ))}
+              </div>
 
-              <motion.p
-                animate={{
-                  color: hovered ? 'rgba(226,232,240,0.9)' : '#475569',
-                }}
-                transition={HOVER_TRANSITION}
-                className="mt-6 text-base md:text-lg max-w-lg mx-auto md:mx-0"
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.25 }}
+                className="mt-4 h-6 text-center md:text-left md:pl-32 lg:pl-52"
               >
-                We build immersive, high-performance sites where motion,
-                interaction, and speed work together.
-              </motion.p>
+                <motion.span
+                  animate={{ color: hovered ? '#cbd5e1' : '#475569' }}
+                  transition={HOVER_TRANSITION}
+                  className="relative inline-flex items-center gap-3 text-base tracking-[0.18em] uppercase font-['Geo',_sans-serif] whitespace-nowrap"
+                  style={{ minHeight: '1.5rem', minWidth: `${typingText.length + 2}ch` }}
+                >
+                  <span className="invisible whitespace-nowrap">{`${typingText} ▼`}</span>
+                  <span className="absolute inset-0 inline-flex items-center gap-2 whitespace-nowrap">
+                    <span className="inline-flex">
+                      {chars.map((char, i) => {
+                        const show = mode === 'typing' ? i < visibleText.length : i >= eraseCount;
+                        return (
+                          <span
+                            key={`${char}-${i}`}
+                            className="inline-block"
+                            style={{
+                              width: '1ch',
+                              visibility: show ? 'visible' : 'hidden',
+                            }}
+                          >
+                            {char}
+                          </span>
+                        );
+                      })}
+                    </span>
+                    <motion.span
+                      animate={{ y: [0, -3, 0] }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      ▼
+                    </motion.span>
+                  </span>
+                </motion.span>
+              </motion.div>
 
               <motion.a
                 href="#contact"
