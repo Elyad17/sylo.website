@@ -182,16 +182,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 </motion.span>
               </motion.div>
 
-              <motion.a
-                href="#contact"
-                whileHover={{
-                  backgroundColor: hovered ? '#14b8a6' : '#0d9488',
-                }}
-                transition={{ duration: 0.3 }}
-                className="inline-block mt-8 bg-teal-500 hover:bg-teal-600 text-white font-semibold py-3 px-7 rounded-full shadow-lg transition-colors"
-              >
-                Get Started
-              </motion.a>
+
             </div>
 
             {/* Orb + HUD */}

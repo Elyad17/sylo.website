@@ -1,13 +1,16 @@
 'use client';
 
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { Playfair_Display, Manrope, IBM_Plex_Mono } from 'next/font/google';
+import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
+import { Playfair_Display, Manrope, IBM_Plex_Mono, Orbitron, Alatsi } from 'next/font/google';
 import { HOVER_TRANSITION } from './hoverTheme';
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '700'] });
 const manrope = Manrope({ subsets: ['latin'], weight: ['700', '800'] });
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '600'] });
+const orbitron = Orbitron({ subsets: ['latin'], weight: ['700'] });
+const alatsi = Alatsi({ subsets: ['latin'], weight: ['400'] });
 
 const ORANGE = '#FF6A00';
 
@@ -28,30 +31,34 @@ const BulletRow: React.FC<BulletRowProps> = ({ label, heroHovered }) => {
   });
 
   return (
-    <li ref={liRef} className="flex items-center gap-4">
-      <motion.div
-        initial={{ opacity: 0, scaleY: 0.4 }}
-        animate={{ opacity: inView ? 1 : 0, scaleY: inView ? 1 : 0.4 }}
-        transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="h-[42px] w-[6px] origin-center flex-shrink-0 rounded-full"
-        style={{
-          background: 'linear-gradient(180deg, #22D3A6, #22D3A6CC)',
-          boxShadow: inView ? '0 8px 24px rgba(34,211,166,0.35)' : 'none',
-        }}
-      />
+    <li ref={liRef} className="flex flex-col gap-2">
+      <div className="flex items-center gap-4">
+        <motion.div
+          initial={{ opacity: 0, scaleY: 0.4 }}
+          animate={{ opacity: inView ? 1 : 0, scaleY: inView ? 1 : 0.4 }}
+          transition={{ duration: 0.25, ease: 'easeOut' }}
+          className="h-[42px] w-[6px] origin-center flex-shrink-0 rounded-full"
+          style={{
+            background: 'linear-gradient(180deg, #22D3A6, #22D3A6CC)',
+            boxShadow: inView ? '0 8px 24px rgba(34,211,166,0.35)' : 'none',
+          }}
+        />
 
-      <motion.span
-        initial={{ opacity: 0, y: 8 }}
-        animate={{
-          opacity: inView ? 1 : 0,
-          y: inView ? 0 : 8,
-          color: heroHovered ? '#e5f3ff' : '#020617',
-        }}
-        transition={{ duration: 0.28, ease: 'easeOut' }}
-        className={`${manrope.className} block select-none text-[22px] md:text-[28px] font-extrabold tracking-[-0.02em]`}
-      >
-        {label}
-      </motion.span>
+        <motion.span
+          initial={{ opacity: 0, y: 8 }}
+          animate={{
+            opacity: inView ? 1 : 0,
+            y: inView ? 0 : 8,
+            color: heroHovered ? '#e5f3ff' : '#020617',
+          }}
+          transition={{ duration: 0.28, ease: 'easeOut' }}
+          className={`${alatsi.className} block select-none text-[22px] md:text-[28px] font-bold tracking-[-0.02em]`}
+        >
+          {label}
+        </motion.span>
+      </div>
+
+      {label === 'Support' && null}
     </li>
   );
 };
@@ -113,9 +120,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
               animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
               transition={HOVER_TRANSITION}
             >
-              <span className="digital-glitch block" data-text="PRESENCE">
-                PRESENCE
-              </span>
+              <ScrambleWord />
             </motion.div>
           </div>
 
@@ -183,7 +188,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
             <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-[0.92fr_1.08fr]">
               <div className="flex items-start md:justify-end">
                 <motion.h3
-                  className={`${manrope.className} text-[9.2vw] leading-[0.9] md:text-[4.8vw] md:leading-[0.9] font-extrabold tracking-[-0.045em] text-left md:text-right`}
+                  className={`${orbitron.className} text-[9.2vw] leading-[0.9] md:text-[4.8vw] md:leading-[0.9] font-extrabold tracking-[-0.045em] text-left md:text-right`}
                   animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
                   transition={HOVER_TRANSITION}
                 >
@@ -205,5 +210,168 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
         </motion.div>
       </div>
     </section>
+  );
+}
+
+function SupportRive() {
+  const { RiveComponent } = useRive({
+    src: '/rive/9445-17946-rocket-without-background.riv',
+    autoplay: true,
+    layout: new Layout({ fit: Fit.Contain, alignment: Alignment.Center }),
+  });
+
+  return (
+    <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-3xl">
+      {RiveComponent ? <RiveComponent style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }} /> : null}
+    </div>
+  );
+}
+
+function SupportRiveWrapper({ parentInView }: { parentInView: boolean }) {
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  // Trigger after scrolling past the support label by roughly one more bullet distance.
+  const supportInView = useInView(sentinelRef, { amount: 0, margin: '0px 0px -65% 0px' });
+
+  return (
+    <div className="mt-2 w-full">
+      <div ref={sentinelRef} className="h-12 w-px opacity-0" aria-hidden />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: parentInView && supportInView ? 1 : 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <SupportRive />
+      </motion.div>
+    </div>
+  );
+}
+
+const SCRAMBLE_WORDS = ['PRESENCE', 'FOOTPRINT', 'VISION', 'IDENTITY'];
+const SCRAMBLE_MAX = SCRAMBLE_WORDS.reduce((m, w) => Math.max(m, w.length), 0);
+const SCRAMBLE_CHARS = '!<>-_\\/[]{}—=+*^?#________ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+function usePrefersReducedMotion() {
+  const [prefers, setPrefers] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const listener = () => setPrefers(media.matches);
+    listener();
+    if (media.addEventListener) {
+      media.addEventListener('change', listener);
+      return () => media.removeEventListener('change', listener);
+    }
+    media.addListener(listener);
+    return () => media.removeListener(listener);
+  }, []);
+
+  return prefers;
+}
+
+type DisplayChar = { char: string; dud: boolean };
+
+function ScrambleWord() {
+  const pad = (word: string) => word.padEnd(SCRAMBLE_MAX, '\u00A0');
+  const [display, setDisplay] = useState<DisplayChar[]>(
+    pad(SCRAMBLE_WORDS[0]).split('').map((c) => ({ char: c, dud: false })),
+  );
+  const indexRef = useRef(0);
+  const reduceMotion = usePrefersReducedMotion();
+
+  useEffect(() => {
+    let raf: number | undefined;
+    let timeout: number | undefined;
+    let active = true;
+
+    const holdDuration = 2000;
+
+    const runScramble = () => {
+      if (!active) return;
+      const current = indexRef.current;
+      const next = (current + 1) % SCRAMBLE_WORDS.length;
+      const from = pad(SCRAMBLE_WORDS[current]);
+      const to = pad(SCRAMBLE_WORDS[next]);
+
+      if (reduceMotion) {
+        setDisplay(to.split('').map((c) => ({ char: c, dud: false })));
+        indexRef.current = next;
+        timeout = window.setTimeout(runScramble, holdDuration);
+        return;
+      }
+
+      type ScrambleFrame = { from: string; to: string; start: number; end: number; char: string };
+      const queue: ScrambleFrame[] = [];
+      for (let i = 0; i < Math.max(from.length, to.length); i += 1) {
+        const start = Math.floor(Math.random() * 90);
+        const end = start + Math.floor(Math.random() * 90);
+        queue.push({
+          from: from[i] || '',
+          to: to[i] || '',
+          start,
+          end,
+          char: '',
+        });
+      }
+
+      let frame = 0;
+
+      const update = () => {
+        if (!active) return;
+        let complete = 0;
+        const out: DisplayChar[] = [];
+
+        for (let i = 0; i < queue.length; i += 1) {
+          const { from: f, to: t, start, end } = queue[i];
+          if (frame >= end) {
+            complete += 1;
+            out.push({ char: t, dud: false });
+          } else if (frame >= start) {
+            queue[i].char =
+              queue[i].char && Math.random() > 0.28
+                ? queue[i].char
+                : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+            out.push({ char: queue[i].char, dud: true });
+          } else {
+            out.push({ char: f, dud: false });
+          }
+        }
+
+        setDisplay(out);
+
+        if (complete === queue.length) {
+          indexRef.current = next;
+          timeout = window.setTimeout(runScramble, holdDuration);
+        } else {
+          frame += 1;
+          raf = requestAnimationFrame(update);
+        }
+      };
+
+      raf = requestAnimationFrame(update);
+    };
+
+    timeout = window.setTimeout(runScramble, holdDuration);
+
+    return () => {
+      active = false;
+      if (raf !== undefined) cancelAnimationFrame(raf);
+      if (timeout !== undefined) clearTimeout(timeout);
+    };
+  }, [reduceMotion]);
+
+  const dataText = display.map((c) => c.char).join('').replace(/\u00A0/g, ' ');
+
+  return (
+    <span
+      className="digital-glitch block"
+      data-text={dataText}
+      style={{ minWidth: `${SCRAMBLE_MAX}ch` }}
+    >
+      {display.map((c, i) => (
+        <span key={i} className={c.dud ? 'opacity-60' : undefined}>
+          {c.char}
+        </span>
+      ))}
+    </span>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
 import ScreenSplitTransition from './ScreenSplitTransition';
 
 type Step = {
@@ -74,17 +75,17 @@ export function ProcessSection() {
       ref={sectionRef}
       className="relative py-24 text-slate-700"
       style={{
-        background: 'linear-gradient(150deg, #ffffff 0%, #ffffff 32%, #f0f0f0 32%, #f0f0f0 100%)',
+        background: 'linear-gradient(150deg, #ffffff 0%, #ffffff 32%, #e5e7eb 32%, #e5e7eb 100%)',
       }}
     >
       <ScreenSplitTransition active={overlayActive} progress={overlayProgress} />
 
       <div className="mx-auto max-w-5xl px-6 md:px-10">
         <div className="flex flex-col items-center text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
-            Process
-          </p>
-          <h2 className="mt-3 font-serif text-4xl font-semibold text-slate-900 sm:text-5xl">
+          <div className="mb-4 h-50 w-50 md:h-54 md:w-54">
+            <ProcessRive />
+          </div>
+          <h2 className="font-serif text-4xl font-semibold text-slate-900 sm:text-5xl">
             Steps to launch
           </h2>
         </div>
@@ -103,8 +104,7 @@ export function ProcessSection() {
             </div>
           </div>
         </div>
-
-        <div className="relative mt-16 flex justify-center">
+      <div className="relative mt-16 flex justify-center">
           <div className="relative w-full max-w-4xl">
             <div className="absolute left-1/2 top-0 z-0 h-full w-px -translate-x-1/2 bg-white/40 backdrop-blur" />
             <motion.div
@@ -161,4 +161,16 @@ export function ProcessSection() {
       </div>
     </section>
   );
+}
+
+function ProcessRive() {
+  const { RiveComponent } = useRive({
+    src: '/rive/9445-17946-rocket-without-background.riv',
+    autoplay: true,
+    layout: new Layout({ fit: Fit.Contain, alignment: Alignment.Center }),
+  });
+
+  if (!RiveComponent) return null;
+
+  return <RiveComponent style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }} />;
 }

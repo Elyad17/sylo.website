@@ -1,103 +1,152 @@
-'use client';
+"use client";
 
-import React, { useMemo, useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-
-type BlobConfig = {
-  size: number;
-  top: string;
-  left: string;
-  depth: number;
-  driftX: number[];
-  driftY: number[];
-  glow: string;
-};
-
-const BLOBS: BlobConfig[] = [
-  { size: 360, top: '12%', left: '18%', depth: 6, driftX: [-6, 6], driftY: [-10, 12], glow: '#42DFBB' },
-  { size: 420, top: '32%', left: '64%', depth: 4, driftX: [8, -6], driftY: [10, -12], glow: '#41D8FF' },
-  { size: 320, top: '64%', left: '34%', depth: 8, driftX: [-4, 8], driftY: [12, -10], glow: '#4D6AFF' },
-];
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import Footer from "./Footer";
 
 export default function ClosingPage() {
+  const [showText, setShowText] = useState(false);
+  const timerRef = useRef<number | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
-  const hasPointer = typeof window !== 'undefined' && matchMedia('(pointer:fine)').matches;
+  const inView = useInView(sectionRef, { amount: 0.3, once: false });
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const smoothedX = useSpring(mouseX, { stiffness: 90, damping: 18, mass: 0.8 });
-  const smoothedY = useSpring(mouseY, { stiffness: 90, damping: 18, mass: 0.8 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (!hasPointer || !sectionRef.current) return;
-    const rect = sectionRef.current.getBoundingClientRect();
-    const x = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
-    const y = (e.clientY - (rect.top + rect.height / 2)) / rect.height;
-    mouseX.set(x);
-    mouseY.set(y);
+  const startSequence = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    setShowText(false);
+    timerRef.current = window.setTimeout(() => setShowText(true), 3000);
   };
 
-  const blobs = useMemo(() => BLOBS, []);
+  useEffect(() => {
+    startSequence();
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        startSequence();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      setShowText(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (inView) {
+      startSequence();
+    }
+  }, [inView]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden py-32 sm:py-36 min-h-screen"
-      style={{
-        background: 'linear-gradient(145deg, #ffffff 0%, #ffffff 38%, #f2f2f2 38%, #f2f2f2 100%)',
-      }}
-      onMouseMove={handleMouseMove}
+      className="relative w-full overflow-hidden pt-32 pb-12 sm:pt-36 sm:pb-16 min-h-screen bg-[#0b1a36] text-[#e8f7ff]"
     >
-      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        {blobs.map((blob, idx) => (
-          <GlassBlob key={idx} config={blob} index={idx} x={smoothedX} y={smoothedY} />
-        ))}
-      </div>
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-0"
+        animate={{ opacity: showText ? 0.35 : 1 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <ClockBackground />
+      </motion.div>
 
-      <div className="mx-auto max-w-3xl px-6 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-          the universe put you here
+      <motion.div
+        className="relative z-20 mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-start pt-6 px-6 text-center pb-24"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showText ? 1 : 0 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      >
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
+          its time to
+          <br />
+          put your business
+          <br />
+          on the map
         </h1>
-        <p className="mt-4 text-xl text-slate-500">let’s act on it</p>
+        <div className="mt-10 flex items-center justify-center">
+          <div className="relative">
+            <div className="pointer-events-none absolute inset-0 rounded-full border border-white/30" />
+            <button className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-b from-[#2a9df4] to-[#0c6fd4] text-white text-xs font-semibold uppercase tracking-[0.12em] shadow-[0_12px_30px_rgba(12,111,212,0.4)]">
+              get started
+            </button>
+          </div>
+        </div>
+      </motion.div>
+
+      <div className="relative z-20 mt-10">
+        <Footer />
       </div>
     </section>
   );
 }
 
-type GlassBlobProps = {
-  config: BlobConfig;
-  index: number;
-  x: ReturnType<typeof useSpring>;
-  y: ReturnType<typeof useSpring>;
-};
+function ClockBackground() {
+  const hourRef = useRef<SVGLineElement | null>(null);
+  const minuteRef = useRef<SVGLineElement | null>(null);
+  const secondRef = useRef<SVGLineElement | null>(null);
 
-function GlassBlob({ config, index, x, y }: GlassBlobProps) {
-  const parallaxX = useTransform(x, (v) => v * config.depth * 12);
-  const parallaxY = useTransform(y, (v) => v * config.depth * 12);
+  useEffect(() => {
+    let frame: number;
+    const tick = () => {
+      const now = new Date();
+      const hr = now.getHours() % 12;
+      const min = now.getMinutes();
+      const sec = now.getSeconds() + now.getMilliseconds() / 1000;
+      const hourDeg = (360 / 12) * (hr + min / 60);
+      const minDeg = (360 / 60) * (min + sec / 60);
+      const secDeg = (360 / 60) * sec;
+      if (hourRef.current) hourRef.current.setAttribute("transform", `rotate(${hourDeg} 100 100)`);
+      if (minuteRef.current) minuteRef.current.setAttribute("transform", `rotate(${minDeg} 100 100)`);
+      if (secondRef.current) secondRef.current.setAttribute("transform", `rotate(${secDeg} 100 100)`);
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   return (
-    <motion.div
-      className="absolute rounded-full bg-white/22 backdrop-blur-[30px] shadow-[0_0_60px_rgba(255,255,255,0.22)]"
-      style={{
-        width: config.size,
-        height: config.size * 0.82,
-        top: config.top,
-        left: config.left,
-        x: parallaxX,
-        y: parallaxY,
-        border: `1px solid ${config.glow}1a`,
-        boxShadow: `0 0 60px ${config.glow}40, inset 0 0 40px rgba(255,255,255,0.5)`,
-      }}
-      animate={{
-        x: config.driftX,
-        y: config.driftY,
-      }}
-      transition={{
-        duration: 18 + index * 3,
-        repeat: Infinity,
-        repeatType: 'reverse',
-        ease: 'easeInOut',
-      }}
-    />
+    <div className="pointer-events-none absolute inset-0 z-0">
+      <svg
+        width="110vmin"
+        height="110vmin"
+        viewBox="0 0 200 200"
+        fill="none"
+        className="absolute left-1/2 -top-6 -translate-x-1/2"
+      >
+        {Array.from({ length: 60 }).map((_, i) => {
+          const angle = (i / 60) * Math.PI * 2;
+          const long = i % 5 === 0;
+          const rOuter = 96;
+          const rInner = long ? 86 : 90;
+          const fmt = (n: number) => n.toFixed(3);
+          const x1 = fmt(100 + rOuter * Math.cos(angle));
+          const y1 = fmt(100 + rOuter * Math.sin(angle));
+          const x2 = fmt(100 + rInner * Math.cos(angle));
+          const y2 = fmt(100 + rInner * Math.sin(angle));
+          return (
+            <line
+              key={i}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke={long ? "#f0f0c9" : "#0f0e0e"}
+              strokeWidth={long ? 2.5 : 1.5}
+              strokeLinecap="round"
+              opacity={0.9}
+            />
+          );
+        })}
+
+        <line ref={hourRef} x1="100" y1="100" x2="100" y2="58" stroke="#ffffff" strokeWidth={7} strokeLinecap="round" />
+        <line ref={minuteRef} x1="100" y1="100" x2="100" y2="42" stroke="#ffffff" strokeWidth={4} strokeLinecap="round" />
+        <line ref={secondRef} x1="100" y1="100" x2="100" y2="32" stroke="#f5e342" strokeWidth={2} strokeLinecap="round" />
+
+        <circle cx="100" cy="100" r="6" fill="#7b0828" stroke="white" strokeWidth={2} />
+      </svg>
+    </div>
   );
 }
