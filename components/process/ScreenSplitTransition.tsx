@@ -44,16 +44,21 @@ export default function ScreenSplitTransition({ progress: _progress, active }: S
   const processBg = '#e5e7eb';
 
   useEffect(() => {
-    if (!visible) return;
     const prevBody = document.body.style.overflow;
     const prevHtml = document.documentElement.style.overflow;
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
+    const timer = window.setTimeout(() => {
+      document.body.style.overflow = prevBody;
+      document.documentElement.style.overflow = prevHtml;
+    }, 1700);
+
     return () => {
+      clearTimeout(timer);
       document.body.style.overflow = prevBody;
       document.documentElement.style.overflow = prevHtml;
     };
-  }, [visible]);
+  }, [active]);
 
   return (
     <motion.div

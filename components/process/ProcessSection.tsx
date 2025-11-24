@@ -48,6 +48,12 @@ export function ProcessSection() {
     }
   }, [lastStepInView, completionProgress, progress]);
 
+  useEffect(() => {
+    if (completionProgress !== null && progress < Math.max(completionProgress - 0.2, 0.4)) {
+      setCompletionProgress(null);
+    }
+  }, [completionProgress, progress]);
+
   const targetProgress = completionProgress ?? 1.05;
   const normalizedProgress = Math.min(progress / targetProgress, 1);
   const computedFill = normalizedProgress * 100;
