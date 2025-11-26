@@ -60,7 +60,7 @@ export default function ClosingPage() {
         transition={{ duration: 0.9, ease: "easeOut" }}
       >
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
-          its time to
+          it's time to
           <br />
           put your business
           <br />

@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
-import ScreenSplitTransition from './ScreenSplitTransition';
+import CubeTransition from './CubeTransition';
 
 type Step = {
   id: number;
@@ -23,7 +23,6 @@ const STEPS: Step[] = [
 export function ProcessSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const lastStepRef = useRef<HTMLDivElement | null>(null);
-
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
@@ -54,23 +53,22 @@ export function ProcessSection() {
     }
   }, [completionProgress, progress]);
 
-  const targetProgress = completionProgress ?? 1.05;
-  const normalizedProgress = Math.min(progress / targetProgress, 1);
-  const computedFill = normalizedProgress * 100;
+  // Align bar finish with the transition trigger so it reaches 100 smoothly right at the flip start
+  const baseStart = completionProgress ?? 0.82;
+  const overlayStart = Math.max(baseStart, 0.7);
+  const overlaySpan = 0.25;
+  const targetProgress = overlayStart; // bar hits 100 when rotation begins
+  const normalizedProgress = Math.min(targetProgress > 0 ? progress / targetProgress : 0, 1);
+  const computedFill = Math.min(normalizedProgress * 100, 100);
   const barWidth = `${computedFill}%`;
   const progressPercent = useMemo(() => Math.round(computedFill), [computedFill]);
 
-  const delayPastCompletion = 0.01; // wait until ~101%
-  const overlayStart = completionProgress !== null
-    ? Math.min(completionProgress + delayPastCompletion, 0.99)
-    : 1;
-  const overlaySpan = Math.max(1 - overlayStart, 0.0001);
-  const overlayProgress = completionProgress !== null
-    ? Math.min(Math.max((progress - overlayStart) / overlaySpan, 0), 1)
-    : 0;
-  const overlayActive = completionProgress !== null && overlayProgress > 0;
+  const overlayProgress = Math.min(Math.max((progress - overlayStart) / overlaySpan, 0), 1);
+  const overlayActive = overlayProgress > 0;
 
-  const timelineFill = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  // Make the vertical line advance faster so it doesn't lag behind the bar
+  const timelineFill = useTransform(scrollYProgress, [0, overlayStart], ['0%', '100%']);
+
   const nodeProgress = useMemo(
     () => STEPS.map((_, idx) => (idx + 1) / STEPS.length),
     []
@@ -84,7 +82,7 @@ export function ProcessSection() {
         background: 'linear-gradient(150deg, #ffffff 0%, #ffffff 32%, #e5e7eb 32%, #e5e7eb 100%)',
       }}
     >
-      <ScreenSplitTransition active={overlayActive} progress={overlayProgress} />
+      <CubeTransition active={overlayActive} progress={overlayProgress} />
 
       <div className="mx-auto max-w-5xl px-6 md:px-10">
         <div className="flex flex-col items-center text-center">
@@ -110,11 +108,11 @@ export function ProcessSection() {
             </div>
           </div>
         </div>
-      <div className="relative mt-16 flex justify-center">
+        <div className="relative mt-16 flex justify-center">
           <div className="relative w-full max-w-4xl">
-            <div className="absolute left-1/2 top-0 z-0 h-full w-px -translate-x-1/2 bg-white/40 backdrop-blur" />
+            <div className="absolute left-1/2 top-0 z-10 h-full w-px -translate-x-1/2 bg-white/60 backdrop-blur" />
             <motion.div
-              className="absolute left-1/2 top-0 z-10 w-[3px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)]"
+              className="absolute left-1/2 top-0 z-20 w-[3px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)]"
               style={{ height: timelineFill }}
             />
 
@@ -163,7 +161,7 @@ export function ProcessSection() {
             </div>
           </div>
         </div>
-        <div ref={lastStepRef} className="mt-24 h-[45vh]" />
+        <div ref={lastStepRef} className="mt-24 h-[120vh]" />
       </div>
     </section>
   );
