@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { HOVER_TRANSITION } from './hoverTheme';
+import ContactModal from './ContactModal';
 
 type HeroProps = {
   hovered: boolean;
@@ -93,8 +94,8 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
               Sylo
             </motion.div>
 
-            <nav className="hidden md:flex space-x-8">
-              {['Services', 'Process', 'Contact'].map((label) => (
+            <nav className="hidden md:flex items-center space-x-8">
+              {['Services', 'Process'].map((label) => (
                 <motion.a
                   key={label}
                   href={`#${label.toLowerCase()}`}
@@ -108,6 +109,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                   {label}
                 </motion.a>
               ))}
+              <ContactModal />
             </nav>
           </div>
         </header>
