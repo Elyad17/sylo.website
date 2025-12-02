@@ -43,7 +43,7 @@ export default function ClosingPage() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden pt-32 pb-12 sm:pt-36 sm:pb-16 min-h-screen bg-[#0b1a36] text-[#e8f7ff]"
+      className="relative w-full overflow-hidden pt-32 pb-32 sm:pt-36 sm:pb-36 min-h-[180vh] bg-[#0b1a36] text-[#e8f7ff]"
     >
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
@@ -54,7 +54,7 @@ export default function ClosingPage() {
       </motion.div>
 
       <motion.div
-        className="relative z-20 mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-start pt-6 px-6 text-center pb-24"
+        className="relative z-20 mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-start pt-6 px-6 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: showText ? 1 : 0 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
@@ -76,9 +76,11 @@ export default function ClosingPage() {
         </div>
       </motion.div>
 
-      <div className="relative z-20 mt-10">
+      <div className="relative z-20 mt-16">
         <Footer />
       </div>
+
+      <div className="h-32 md:h-48" aria-hidden />
     </section>
   );
 }
