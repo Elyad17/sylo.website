@@ -6,37 +6,13 @@ import Footer from "./Footer";
 
 export default function ClosingPage() {
   const [showText, setShowText] = useState(false);
-  const timerRef = useRef<number | null>(null);
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.3, once: false });
 
-  const startSequence = () => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-      timerRef.current = null;
-    }
-    setShowText(false);
-    timerRef.current = window.setTimeout(() => setShowText(true), 3000);
-  };
-
-  useEffect(() => {
-    startSequence();
-    const handleVisibility = () => {
-      if (document.visibilityState === "visible") {
-        startSequence();
-      }
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibility);
-      if (timerRef.current) clearTimeout(timerRef.current);
-      setShowText(false);
-    };
-  }, []);
-
   useEffect(() => {
     if (inView) {
-      startSequence();
+      const timer = window.setTimeout(() => setShowText(true), 2000);
+      return () => window.clearTimeout(timer);
     }
   }, [inView]);
 
@@ -76,7 +52,35 @@ export default function ClosingPage() {
         </div>
       </motion.div>
 
-      <div className="relative z-20 mt-16">
+      <div className="relative z-20 mt-16 px-6 sm:px-10">
+        <section className="mb-10 rounded-3xl border border-white/10 bg-white/5 px-6 py-8 text-center text-[#e8f7ff] shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur sm:px-8 sm:py-10">
+          <div className="mx-auto flex max-w-5xl flex-col gap-6 text-sm sm:flex-row sm:items-start sm:justify-between">
+            <div className="space-y-2">
+              <p className="text-[11px] uppercase tracking-[0.28em] text-white/60">Sylo Agency</p>
+              <p className="text-white">Launch bold web experiences.</p>
+            </div>
+            <div className="flex flex-wrap gap-6 text-white/85">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Contact</p>
+                <p>hello@sylo.studio</p>
+                <p>+1 (310) 555-0123</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Links</p>
+                <p>Work</p>
+                <p>Process</p>
+                <p>About</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Social</p>
+                <p>Instagram</p>
+                <p>LinkedIn</p>
+                <p>Dribbble</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <Footer />
       </div>
 

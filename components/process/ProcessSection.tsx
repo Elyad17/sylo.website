@@ -54,9 +54,8 @@ export function ProcessSection() {
   }, [completionProgress, progress]);
 
   // Align bar finish with the transition trigger so it reaches 100 smoothly right at the flip start
-  const baseStart = completionProgress ?? 0.82;
-  const overlayStart = Math.max(baseStart, 0.7);
-  const overlaySpan = 0.25;
+  const overlayStart = 0.75;
+  const overlaySpan = 0.25; // dedicate final 25% of progress to the flip
   const targetProgress = overlayStart; // bar hits 100 when rotation begins
   const normalizedProgress = Math.min(targetProgress > 0 ? progress / targetProgress : 0, 1);
   const computedFill = Math.min(normalizedProgress * 100, 100);
@@ -64,7 +63,7 @@ export function ProcessSection() {
   const progressPercent = useMemo(() => Math.round(computedFill), [computedFill]);
 
   const overlayProgress = Math.min(Math.max((progress - overlayStart) / overlaySpan, 0), 1);
-  const overlayActive = overlayProgress > 0;
+  const overlayActive = overlayProgress > 0 && overlayProgress <= 1;
 
   // Make the vertical line advance faster so it doesn't lag behind the bar
   const timelineFill = useTransform(scrollYProgress, [0, overlayStart], ['0%', '100%']);

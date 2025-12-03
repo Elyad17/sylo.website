@@ -44,6 +44,8 @@ export default function CubeTransition({ progress, active }: CubeTransitionProps
         >
           <ClosingPage />
         </motion.div>
+
+        {/* Overlay footer removed; moved to ClosingPage layout */}
       </div>
     </section>
   );
