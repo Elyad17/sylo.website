@@ -13,6 +13,7 @@ type ContactModalProps = {
   onOpenChange?: (open: boolean) => void;
   showTrigger?: boolean;
   triggerLabel?: string;
+  renderTrigger?: (open: () => void) => React.ReactNode;
 };
 
 export default function ContactModal({
@@ -20,6 +21,7 @@ export default function ContactModal({
   onOpenChange,
   showTrigger = true,
   triggerLabel = "Contact",
+  renderTrigger,
 }: ContactModalProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [projectType, setProjectType] = useState<ProjectType | null>(null);
@@ -64,14 +66,16 @@ export default function ContactModal({
 
   return (
     <>
-      {showTrigger && (
+      {renderTrigger
+        ? renderTrigger(() => setModalOpen(true))
+        : showTrigger && (
         <button
           onClick={() => setModalOpen(true)}
-          className="rounded-full border border-black/10 bg-black text-white px-5 py-2 text-sm font-semibold shadow-lg shadow-black/20 transition hover:scale-[1.02] hover:shadow-black/30"
+          className="cursor-pointer rounded-full border border-black/10 bg-black text-white px-5 py-2 text-sm font-semibold shadow-lg shadow-black/20 transition hover:scale-[1.02] hover:shadow-black/30"
         >
           {triggerLabel}
         </button>
-      )}
+        )}
 
       <AnimatePresence>
         {modalOpen && (
@@ -110,9 +114,8 @@ export default function ContactModal({
 
               <div className="space-y-2">
                 <h2 className="text-2xl font-semibold text-black sm:text-3xl">
-                  Let’s put your business on the map
+                  Tell us about your project.
                 </h2>
-                <p className="text-sm text-slate-600 sm:text-base">Tell us a bit about your project.</p>
               </div>
 
               <form onSubmit={handleSubmit} className="mt-6 space-y-6 text-black">
@@ -169,14 +172,11 @@ export default function ContactModal({
                 </div>
 
                 {/* Contact details */}
-                <div className="space-y-3">
-                  <span className="text-sm font-semibold text-slate-900">Contact details</span>
-                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <InputField label="Email" required value={email} onChange={setEmail} type="email" />
-                    <InputField label="Phone" value={phone} onChange={setPhone} />
-                    <InputField label="Business name" value={business} onChange={setBusiness} />
-                    <InputField label="Name" required value={name} onChange={setName} />
-                  </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <InputField label="Email" required value={email} onChange={setEmail} type="email" />
+                  <InputField label="Phone" value={phone} onChange={setPhone} />
+                  <InputField label="Business name" value={business} onChange={setBusiness} />
+                  <InputField label="Name" required value={name} onChange={setName} />
                 </div>
 
                 {/* Notes */}

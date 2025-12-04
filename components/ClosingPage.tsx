@@ -8,15 +8,23 @@ export default function ClosingPage() {
   const [showText, setShowText] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [ctaHover, setCtaHover] = useState(false);
+  const [footerVisible, setFooterVisible] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.3, once: false });
 
   useEffect(() => {
     if (inView) {
-      const timer = window.setTimeout(() => setShowText(true), 2000);
+      const timer = window.setTimeout(() => setShowText(true), 1500);
       return () => window.clearTimeout(timer);
     }
   }, [inView]);
+
+  useEffect(() => {
+    if (showText) {
+      const timer = window.setTimeout(() => setFooterVisible(true), 1200);
+      return () => window.clearTimeout(timer);
+    }
+  }, [showText]);
 
   return (
     <section
@@ -44,7 +52,7 @@ export default function ClosingPage() {
           <br />
           on the map
         </h1>
-        <div className="mt-10 flex items-center justify-center">
+        <div className="mt-14 flex items-center justify-center">
           <div className="relative">
             <div className="pointer-events-none absolute inset-0 rounded-full border border-white/30" />
             <motion.button
@@ -54,7 +62,7 @@ export default function ClosingPage() {
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
               onClick={() => setContactOpen(true)}
-              className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gradient-to-b from-[#2a9df4] via-[#1b8ce0] to-[#0c6fd4] text-white text-xs font-semibold uppercase tracking-[0.12em] shadow-[0_12px_30px_rgba(12,111,212,0.4)] transition-all duration-700"
+              className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gradient-to-b from-[#2a9df4] via-[#1b8ce0] to-[#0c6fd4] text-white text-xs font-semibold uppercase tracking-[0.12em] shadow-[0_12px_30px_rgba(12,111,212,0.4)] transition-all duration-700"
             >
               <motion.div
                 className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#34d399] via-[#10b981] to-[#0f9a74]"
@@ -68,6 +76,36 @@ export default function ClosingPage() {
       </motion.div>
 
       <ContactModal open={contactOpen} onOpenChange={setContactOpen} showTrigger={false} />
+
+      <motion.div
+        className="pointer-events-none absolute inset-x-0 bottom-4 z-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: footerVisible ? 1 : 0, y: footerVisible ? 0 : 20 }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      >
+        <div className="relative mx-auto w-full max-w-6xl px-6 sm:px-10">
+          <div className="relative grid grid-cols-3 gap-6 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white/85 sm:text-xs">
+            <div className="flex flex-col gap-1 border-r border-white/12 pr-4">
+              <span className="text-[11px] text-white/60">Services</span>
+              <span>Web Design</span>
+              <span>Development</span>
+              <span>Launch</span>
+            </div>
+            <div className="flex flex-col gap-1 border-r border-white/12 px-4">
+              <span className="text-[11px] text-white/60">Company</span>
+              <span>About</span>
+              <span>Process</span>
+              <span>Careers</span>
+            </div>
+            <div className="flex flex-col gap-1 pl-4">
+              <span className="text-[11px] text-white/60">Contact</span>
+              <span>hello@sylo.studio</span>
+              <span>+1 (310) 555-0123</span>
+              <span>Los Angeles, CA</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

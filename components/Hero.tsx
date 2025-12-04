@@ -95,7 +95,20 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
             </motion.div>
 
             <nav className="hidden md:flex items-center space-x-8">
-              <ContactModal />
+              <ContactModal
+                showTrigger={false}
+                renderTrigger={(open) => (
+                  <motion.button
+                    onClick={open}
+                    animate={{ color: hovered ? '#f1f5f9' : '#0f172a' }}
+                    whileHover={{ color: hovered ? '#5eead4' : '#0d9488' }}
+                    transition={HOVER_TRANSITION}
+                    className="cursor-pointer text-sm font-semibold uppercase tracking-[0.16em]"
+                  >
+                    Contact
+                  </motion.button>
+                )}
+              />
             </nav>
           </div>
         </header>
@@ -297,21 +310,21 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 animate={{ opacity: hovered ? 1 : 0.75 }}
                 transition={HOVER_TRANSITION}
               >
-                <Pill label="Lighthouse" value="98" active={hovered} />
+                <Pill label="Higher Conversions" active={hovered} />
               </motion.div>
               <motion.div
                 className="absolute top-10 -right-4"
                 animate={{ opacity: hovered ? 1 : 0.75 }}
                 transition={HOVER_TRANSITION}
               >
-                <Pill label="Core Web Vitals" value="Pass" active={hovered} />
+                <Pill label="Seamless Flow" active={hovered} />
               </motion.div>
               <motion.div
                 className="absolute -bottom-5 right-10"
                 animate={{ opacity: hovered ? 1 : 0.75 }}
                 transition={HOVER_TRANSITION}
               >
-                <Pill label="WCAG" value="AA" active={hovered} />
+                <Pill label="SEO Optimized" active={hovered} />
               </motion.div>
             </div>
           </div>
@@ -327,7 +340,7 @@ function Pill({
   active,
 }: {
   label: string;
-  value: string;
+  value?: string;
   active: boolean;
 }) {
   return (
@@ -346,7 +359,7 @@ function Pill({
         className="h-1.5 w-1.5 rounded-full"
       />
       <span className="font-mono text-[11px]">{label}</span>
-      <span className="text-[12px] font-semibold">{value}</span>
+      {value ? <span className="text-[12px] font-semibold">{value}</span> : null}
     </motion.div>
   );
 }

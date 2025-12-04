@@ -8,7 +8,7 @@ interface CubeTransitionProps {
   active: boolean;
 }
 
-const snapshotSrc = '/pictures/Screenshot%202025-11-25%20at%208.58.43%E2%80%AFPM.png'; // static snapshot in public/pictures
+const snapshotSrc = '/pictures/Screenshot%202025-12-04%20at%2012.18.21%E2%80%AFAM.png'; // static snapshot in public/pictures
 
 export default function CubeTransition({ progress, active }: CubeTransitionProps) {
   if (!active) return null;
