@@ -119,9 +119,9 @@ export function ProcessSection() {
         </div>
         <div className="relative mt-16 flex justify-center">
           <div className="relative w-full max-w-4xl">
-            <div className="absolute left-1/2 top-0 z-10 h-full w-px -translate-x-1/2 bg-white/60 backdrop-blur" />
+            <div className="absolute left-1/2 top-0 z-0 h-full w-px -translate-x-1/2 bg-white/60 backdrop-blur" />
             <motion.div
-              className="absolute left-1/2 top-0 z-20 w-[3px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)]"
+              className="absolute left-1/2 top-0 z-10 w-[3px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)]"
               style={{ height: timelineFill }}
             />
 

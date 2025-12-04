@@ -40,7 +40,16 @@ export default function ContactModal({
   };
 
   useEffect(() => {
-    // Keep scrollbars stable to avoid navbar shift; do not alter overflow.
+    if (modalOpen) {
+      const prevBodyOverflow = document.body.style.overflow;
+      const prevHtmlOverflow = document.documentElement.style.overflow;
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prevBodyOverflow;
+        document.documentElement.style.overflow = prevHtmlOverflow;
+      };
+    }
     return undefined;
   }, [modalOpen]);
 
