@@ -23,6 +23,7 @@ const STEPS: Step[] = [
 export function ProcessSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const lastStepRef = useRef<HTMLDivElement | null>(null);
+  const [timelineReady, setTimelineReady] = useState(false);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end end'],
@@ -61,6 +62,11 @@ export function ProcessSection() {
       setCompletionProgress(null);
     }
   }, [completionProgress, progress]);
+
+  useEffect(() => {
+    const t = setTimeout(() => setTimelineReady(true), 120);
+    return () => clearTimeout(t);
+  }, []);
 
   // Align bar finish with the transition trigger so it reaches 100 smoothly right at the flip start
   // Desktop flip timing (restored): start at 75% and span the final 25% for a smoother play
@@ -118,14 +124,24 @@ export function ProcessSection() {
           </div>
         </div>
         <div className="relative mt-16 flex justify-center">
-          <div className="relative w-full max-w-4xl">
-            <div className="absolute left-1/2 top-0 z-0 h-full w-px -translate-x-1/2 bg-white/60 backdrop-blur" />
-            <motion.div
-              className="absolute left-1/2 top-0 z-10 w-[3px] -translate-x-1/2 rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)]"
-              style={{ height: timelineFill }}
-            />
+          <div className="relative z-0 w-full max-w-4xl">
+            {timelineReady && (
+              <>
+                <div
+                  className="pointer-events-none absolute top-0 z-0 h-full w-px bg-white/60 backdrop-blur"
+                  style={{ left: '50%', marginLeft: '-0.5px' }}
+                />
+                <motion.div
+                  className="pointer-events-none absolute top-0 z-0 w-[3px] rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)]"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  style={{ height: timelineFill, left: '50%', marginLeft: '-1.5px' }}
+                />
+              </>
+            )}
 
-            <div className="relative z-20 space-y-20 sm:space-y-24">
+            <div className="relative z-10 space-y-20 sm:space-y-24">
               {STEPS.map((step, idx) => {
                 const threshold = nodeProgress[idx];
                 const nodeActive = progress >= threshold;
@@ -139,7 +155,7 @@ export function ProcessSection() {
                     className="relative flex w-full justify-center"
                   >
                     <motion.article
-                      className="group relative w-[88%] max-w-2xl md:w-[58%] rounded-3xl border border-white/60 bg-white/25 px-6 py-8 text-center shadow-[0_25px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(77,106,255,0.16)]"
+                      className="group relative w-[88%] max-w-2xl md:w-[58%] rounded-3xl border border-white/60 bg-white/85 px-6 py-8 text-center shadow-[0_25px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(77,106,255,0.16)]"
                       style={{
                         boxShadow:
                           '0 16px 50px rgba(15,23,42,0.08), 0 0 25px rgba(77,106,255,0.12)',

@@ -175,7 +175,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 <motion.span
                   animate={{ color: hovered ? '#cbd5e1' : '#475569' }}
                   transition={HOVER_TRANSITION}
-                  className="relative inline-flex items-center gap-3 text-base tracking-[0.18em] uppercase font-['Geo',_sans-serif] whitespace-nowrap"
+                  className="relative inline-flex items-center gap-3 text-base tracking-[0.04em] uppercase font-['Geo',_sans-serif] whitespace-nowrap"
                   style={{ minHeight: '1.5rem', minWidth: `${typingText.length + 2}ch` }}
                 >
                   <span className="invisible whitespace-nowrap">{`${typingText} ▼`}</span>
@@ -183,12 +183,25 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                     <span className="inline-flex">
                       {chars.map((char, i) => {
                         const show = mode === 'typing' ? i < visibleText.length : i >= eraseCount;
+                        if (char === ' ') {
+                          return (
+                            <span
+                              key={`space-${i}`}
+                              className="inline-block"
+                              style={{
+                                width: '1.6ch',
+                                visibility: show ? 'visible' : 'hidden',
+                              }}
+                            >
+                              &nbsp;
+                            </span>
+                          );
+                        }
                         return (
                           <span
                             key={`${char}-${i}`}
                             className="inline-block"
                             style={{
-                              width: '1ch',
                               visibility: show ? 'visible' : 'hidden',
                             }}
                           >
