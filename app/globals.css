@@ -2,7 +2,7 @@
 /* Tailwind v4: single import */
 @import "tailwindcss";
 
-/* --- Sylo global polish --- */
+/* --- PixlBulilder global polish --- */
 :root {
   --sylo-tracking-tight: -0.02em;
   /* Prevent layout shift when overlays open by reserving scrollbar space */

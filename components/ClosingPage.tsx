@@ -29,7 +29,7 @@ export default function ClosingPage() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden min-h-screen pt-28 pb-4 sm:pt-32 sm:pb-6 bg-[#0b1a36] text-[#e8f7ff]"
+      className="relative w-full overflow-hidden min-h-screen pt-28 pb-0 sm:pt-32 sm:pb-2 bg-[#0b1a36] text-[#e8f7ff]"
     >
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"

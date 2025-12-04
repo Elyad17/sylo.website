@@ -3,9 +3,9 @@ import type { Metadata } from 'next';
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 
 export const metadata: Metadata = {
-  title: 'Sylo – Innovative Web Solutions',
+  title: 'PixlBulilder – Innovative Web Solutions',
   description:
-    'Sylo is a full-service web development agency. We blend creativity and technology to build fast, accessible and visually striking websites.',
+    'PixlBulilder is a full-service web development agency. We blend creativity and technology to build fast, accessible and visually striking websites.',
 };
 
 // Load variable fonts and expose them as CSS variables
