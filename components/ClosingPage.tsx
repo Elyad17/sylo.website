@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import Footer from "./Footer";
+import ContactModal from "./ContactModal";
 
 export default function ClosingPage() {
   const [showText, setShowText] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const [ctaHover, setCtaHover] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const inView = useInView(sectionRef, { amount: 0.3, once: false });
 
@@ -19,7 +21,7 @@ export default function ClosingPage() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden pt-32 pb-32 sm:pt-36 sm:pb-36 min-h-[180vh] bg-[#0b1a36] text-[#e8f7ff]"
+      className="relative w-full overflow-hidden min-h-screen pt-28 pb-20 sm:pt-32 sm:pb-24 bg-[#0b1a36] text-[#e8f7ff]"
     >
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
@@ -30,7 +32,7 @@ export default function ClosingPage() {
       </motion.div>
 
       <motion.div
-        className="relative z-20 mx-auto flex min-h-[80vh] max-w-4xl flex-col items-center justify-start pt-6 px-6 text-center"
+        className="relative z-20 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-start pt-6 px-6 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: showText ? 1 : 0 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
@@ -45,46 +47,27 @@ export default function ClosingPage() {
         <div className="mt-10 flex items-center justify-center">
           <div className="relative">
             <div className="pointer-events-none absolute inset-0 rounded-full border border-white/30" />
-            <button className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-b from-[#2a9df4] to-[#0c6fd4] text-white text-xs font-semibold uppercase tracking-[0.12em] shadow-[0_12px_30px_rgba(12,111,212,0.4)]">
-              get started
-            </button>
+            <motion.button
+              onHoverStart={() => setCtaHover(true)}
+              onHoverEnd={() => setCtaHover(false)}
+              whileHover={{ scale: 1.05, boxShadow: "0 18px 50px rgba(16,185,129,0.45)" }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              onClick={() => setContactOpen(true)}
+              className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-gradient-to-b from-[#2a9df4] via-[#1b8ce0] to-[#0c6fd4] text-white text-xs font-semibold uppercase tracking-[0.12em] shadow-[0_12px_30px_rgba(12,111,212,0.4)] transition-all duration-700"
+            >
+              <motion.div
+                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#34d399] via-[#10b981] to-[#0f9a74]"
+                animate={{ opacity: ctaHover ? 1 : 0 }}
+                transition={{ duration: 1.2, ease: "easeInOut" }}
+              />
+              <span className="relative z-10">get started</span>
+            </motion.button>
           </div>
         </div>
       </motion.div>
 
-      <div className="relative z-20 mt-16 px-6 sm:px-10">
-        <section className="mb-10 rounded-3xl border border-white/10 bg-white/5 px-6 py-8 text-center text-[#e8f7ff] shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur sm:px-8 sm:py-10">
-          <div className="mx-auto flex max-w-5xl flex-col gap-6 text-sm sm:flex-row sm:items-start sm:justify-between">
-            <div className="space-y-2">
-              <p className="text-[11px] uppercase tracking-[0.28em] text-white/60">Sylo Agency</p>
-              <p className="text-white">Launch bold web experiences.</p>
-            </div>
-            <div className="flex flex-wrap gap-6 text-white/85">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Contact</p>
-                <p>hello@sylo.studio</p>
-                <p>+1 (310) 555-0123</p>
-              </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Links</p>
-                <p>Work</p>
-                <p>Process</p>
-                <p>About</p>
-              </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Social</p>
-                <p>Instagram</p>
-                <p>LinkedIn</p>
-                <p>Dribbble</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <Footer />
-      </div>
-
-      <div className="h-32 md:h-48" aria-hidden />
+      <ContactModal open={contactOpen} onOpenChange={setContactOpen} showTrigger={false} />
     </section>
   );
 }

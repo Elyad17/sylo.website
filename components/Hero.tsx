@@ -95,20 +95,6 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
             </motion.div>
 
             <nav className="hidden md:flex items-center space-x-8">
-              {['Services', 'Process'].map((label) => (
-                <motion.a
-                  key={label}
-                  href={`#${label.toLowerCase()}`}
-                  animate={{ color: hovered ? '#f1f5f9' : '#0f172a' }}
-                  whileHover={{
-                    color: hovered ? '#5eead4' : '#0d9488',
-                  }}
-                  transition={HOVER_TRANSITION}
-                  className="transition-colors"
-                >
-                  {label}
-                </motion.a>
-              ))}
               <ContactModal />
             </nav>
           </div>

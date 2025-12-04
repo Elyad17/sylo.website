@@ -128,14 +128,6 @@ export function ProcessSection() {
                     viewport={{ once: true, amount: 0.35 }}
                     className="relative flex w-full justify-center"
                   >
-                    <div className="absolute left-1/2 top-1/2 z-30 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/70 bg-white/70 shadow-[0_0_20px_rgba(77,106,255,0.15)]">
-                      <motion.div
-                        className="absolute inset-[3px] rounded-full bg-gradient-to-br from-[#42DFBB] to-[#4D6AFF]"
-                        animate={{ opacity: nodeActive ? 1 : 0.12, scale: nodeActive ? 1 : 0.8 }}
-                        transition={{ duration: 0.25 }}
-                      />
-                    </div>
-
                     <motion.article
                       className="group relative w-[88%] max-w-2xl md:w-[58%] rounded-3xl border border-white/60 bg-white/25 px-6 py-8 text-center shadow-[0_25px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(77,106,255,0.16)]"
                       style={{
@@ -146,8 +138,8 @@ export function ProcessSection() {
                       <div className="absolute inset-0 rounded-3xl ring-1 ring-white/50 ring-offset-0 transition duration-300 group-hover:ring-[#7fb8ff]/80" />
 
                       <div className="flex items-center justify-center">
-                        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/80 text-base font-semibold text-slate-900 shadow-inner shadow-white/40">
-                          {String(step.id).padStart(2, '0')}
+                        <span className="text-lg font-semibold text-slate-900 -mt-1">
+                          {step.id}
                         </span>
                       </div>
                       <h3 className="mt-4 font-serif text-2xl font-semibold text-slate-900 sm:text-[26px]">

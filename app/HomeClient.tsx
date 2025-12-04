@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Hero from '../components/Hero';
 import WhyUs from '../components/WhyUs';
 import { ProcessSection } from '@/components/process/ProcessSection';
+import ClosingPage from '../components/ClosingPage';
 
 export default function HomeClient() {
   const [heroHovered, setHeroHovered] = useState(false);
@@ -13,6 +14,7 @@ export default function HomeClient() {
       <Hero hovered={heroHovered} setHovered={setHeroHovered} />
       <WhyUs heroHovered={heroHovered} />
       <ProcessSection />
+      <ClosingPage />
     </>
   );
 }

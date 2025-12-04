@@ -1,15 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 type ProjectType = "Landing page" | "Presentational" | "Informational" | "Ecommerce" | "One-pager";
 
 const PROJECT_TYPES: ProjectType[] = ["Landing page", "Presentational", "Informational", "Ecommerce", "One-pager"];
-const BUDGET_OPTIONS = ["< $1,000", "$1,000 – $3,000", "$3,000 – $5,000", "$5,000+"];
+const BUDGET_OPTIONS = ["< $1,000", "$1,000 – $3,000", "$3,000 – $5,000", "$5,000 – $10,000", "$10,000+"];
 
-export default function ContactModal() {
-  const [open, setOpen] = useState(false);
+type ContactModalProps = {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showTrigger?: boolean;
+  triggerLabel?: string;
+};
+
+export default function ContactModal({
+  open,
+  onOpenChange,
+  showTrigger = true,
+  triggerLabel = "Contact",
+}: ContactModalProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
   const [projectType, setProjectType] = useState<ProjectType | null>(null);
   const [budget, setBudget] = useState<string>("");
   const [email, setEmail] = useState("");
@@ -18,15 +30,22 @@ export default function ContactModal() {
   const [name, setName] = useState("");
   const [notes, setNotes] = useState("");
 
+  const isControlled = useMemo(() => open !== undefined, [open]);
+  const modalOpen = isControlled ? !!open : internalOpen;
+  const setModalOpen = (value: boolean) => {
+    if (!isControlled) setInternalOpen(value);
+    onOpenChange?.(value);
+  };
+
   useEffect(() => {
-    if (open) {
+    if (modalOpen) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
       return () => {
         document.body.style.overflow = prev;
       };
     }
-  }, [open]);
+  }, [modalOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,20 +59,22 @@ export default function ContactModal() {
       name,
       notes,
     });
-    setOpen(false);
+    setModalOpen(false);
   };
 
   return (
     <>
-      <button
-        onClick={() => setOpen(true)}
-        className="rounded-full border border-black/10 bg-black text-white px-5 py-2 text-sm font-semibold shadow-lg shadow-black/20 transition hover:scale-[1.02] hover:shadow-black/30"
-      >
-        Contact
-      </button>
+      {showTrigger && (
+        <button
+          onClick={() => setModalOpen(true)}
+          className="rounded-full border border-black/10 bg-black text-white px-5 py-2 text-sm font-semibold shadow-lg shadow-black/20 transition hover:scale-[1.02] hover:shadow-black/30"
+        >
+          {triggerLabel}
+        </button>
+      )}
 
       <AnimatePresence>
-        {open && (
+        {modalOpen && (
           <motion.div
             className="fixed inset-0 z-[9998] flex items-center justify-center px-4 sm:px-6"
             initial={{ opacity: 0 }}
@@ -62,8 +83,8 @@ export default function ContactModal() {
             transition={{ duration: 0.35, ease: "easeOut" }}
           >
             <motion.div
-              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-              onClick={() => setOpen(false)}
+              className="absolute inset-0 bg-white"
+              onClick={() => setModalOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -78,10 +99,9 @@ export default function ContactModal() {
               transition={{ duration: 0.35, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-200/30 via-transparent to-emerald-200/10" />
 
               <button
-                onClick={() => setOpen(false)}
+                onClick={() => setModalOpen(false)}
                 className="absolute right-3 top-3 rounded-full border border-black/10 bg-black/5 p-2 text-slate-600 backdrop-blur transition hover:scale-105 hover:text-black"
                 aria-label="Close"
               >
@@ -130,15 +150,21 @@ export default function ContactModal() {
                     <select
                       value={budget}
                       onChange={(e) => setBudget(e.target.value)}
-                      className="w-full rounded-md border border-black/15 bg-white px-3 py-2 text-sm text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+                      className="w-full appearance-none rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-slate-800 shadow-inner shadow-white/60 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+                      style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
                     >
-                      <option value="">Select budget</option>
+                      <option value="" className="bg-white text-slate-800">Select budget</option>
                       {BUDGET_OPTIONS.map((opt) => (
                         <option key={opt} value={opt} className="bg-white text-slate-800">
                           {opt}
                         </option>
                       ))}
                     </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-400">
+                      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden>
+                        <path d="M5 8l5 5 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
 

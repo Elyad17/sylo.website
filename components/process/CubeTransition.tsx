@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import ClosingPage from '@/components/ClosingPage';
+import ClosingPage from '../ClosingPage';
 
 interface CubeTransitionProps {
   progress: number; // 0..1 scroll-driven
@@ -20,7 +20,7 @@ export default function CubeTransition({ progress, active }: CubeTransitionProps
   const processBg = '#e5e7eb';
 
   return (
-    <section className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden" style={{ background: '#000' }}>
+    <section className="pointer-events-auto fixed inset-0 z-[9999] overflow-hidden" style={{ background: '#000' }}>
       <div className="relative h-full w-full [perspective:1400px]">
         <motion.div
           className="absolute inset-0"
