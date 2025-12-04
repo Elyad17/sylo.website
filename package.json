@@ -12,6 +12,7 @@
     "@pixi/filter-glitch": "^5.1.1",
     "@react-three/fiber": "^9.4.0",
     "@rive-app/react-canvas": "^4.24.0",
+    "@vercel/analytics": "^1.6.1",
     "framer-motion": "^12.23.24",
     "html2canvas": "^1.4.1",
     "lottie-react": "^2.4.1",

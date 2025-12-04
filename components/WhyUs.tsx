@@ -77,7 +77,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
   );
 
   return (
-    <section id="why-us" className="relative w-full overflow-hidden pt-36 md:pt-48">
+    <section id="why-us" className="relative w-full overflow-hidden pt-36 md:pt-48 pb-32 md:pb-44">
       {/* light background – same as hero default */}
       <motion.div
         className="absolute inset-0 -z-10"
