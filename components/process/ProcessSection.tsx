@@ -13,9 +13,9 @@ type Step = {
 const STEPS: Step[] = [
   { id: 1, title: 'You submit brief description' },
   { id: 2, title: 'We make sitemap + wireframe' },
-  { id: 3, title: 'You approve' },
+  { id: 3, title: 'You approve sitemap + wireframe' },
   { id: 4, title: 'We make design' },
-  { id: 5, title: 'You approve' },
+  { id: 5, title: 'You approve design' },
   { id: 6, title: 'We build the site' },
   { id: 7, title: 'Launch website' },
 ];
@@ -30,11 +30,20 @@ export function ProcessSection() {
 
   const [progress, setProgress] = useState(0);
   const [completionProgress, setCompletionProgress] = useState<number | null>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   const lastStepInView = useInView(lastStepRef, {
     amount: 0,
     margin: '0px 0px -50% 0px',
   });
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const handle = () => setIsDesktop(mq.matches);
+    handle();
+    mq.addEventListener('change', handle);
+    return () => mq.removeEventListener('change', handle);
+  }, []);
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const clamped = Math.max(0, Math.min(1, v));
@@ -54,8 +63,9 @@ export function ProcessSection() {
   }, [completionProgress, progress]);
 
   // Align bar finish with the transition trigger so it reaches 100 smoothly right at the flip start
+  // Desktop flip timing (restored): start at 75% and span the final 25% for a smoother play
   const overlayStart = 0.75;
-  const overlaySpan = 0.25; // dedicate final 25% of progress to the flip
+  const overlaySpan = 0.25; // final quarter drives the flip
   const targetProgress = overlayStart; // bar hits 100 when rotation begins
   const normalizedProgress = Math.min(targetProgress > 0 ? progress / targetProgress : 0, 1);
   const computedFill = Math.min(normalizedProgress * 100, 100);
@@ -63,7 +73,7 @@ export function ProcessSection() {
   const progressPercent = useMemo(() => Math.round(computedFill), [computedFill]);
 
   const overlayProgress = Math.min(Math.max((progress - overlayStart) / overlaySpan, 0), 1);
-  const overlayActive = overlayProgress > 0 && overlayProgress <= 1;
+  const overlayActive = isDesktop && overlayProgress > 0 && overlayProgress <= 1;
 
   // Make the vertical line advance faster so it doesn't lag behind the bar
   const timelineFill = useTransform(scrollYProgress, [0, overlayStart], ['0%', '100%']);
@@ -81,7 +91,7 @@ export function ProcessSection() {
         background: 'linear-gradient(150deg, #ffffff 0%, #ffffff 32%, #e5e7eb 32%, #e5e7eb 100%)',
       }}
     >
-      <CubeTransition active={overlayActive} progress={overlayProgress} />
+      {isDesktop && <CubeTransition active={overlayActive} progress={overlayProgress} />}
 
       <div className="mx-auto max-w-5xl px-6 md:px-10">
         <div className="flex flex-col items-center text-center">
@@ -138,11 +148,11 @@ export function ProcessSection() {
                       <div className="absolute inset-0 rounded-3xl ring-1 ring-white/50 ring-offset-0 transition duration-300 group-hover:ring-[#7fb8ff]/80" />
 
                       <div className="flex items-center justify-center">
-                        <span className="text-lg font-semibold text-slate-900 -mt-1">
+                        <span className="text-lg font-semibold text-slate-900 -mt-1 font-['Noto_Serif_Old_Uyghur',_serif]">
                           {step.id}
                         </span>
                       </div>
-                      <h3 className="mt-4 font-serif text-2xl font-semibold text-slate-900 sm:text-[26px]">
+                      <h3 className="mt-4 font-['Noto_Serif_Old_Uyghur',_serif] text-2xl font-semibold text-slate-900 sm:text-[26px]">
                         {step.title}
                       </h3>
                     </motion.article>

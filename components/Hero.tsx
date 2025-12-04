@@ -16,6 +16,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
   const [visibleText, setVisibleText] = useState('');
   const [eraseCount, setEraseCount] = useState(0);
   const [mode, setMode] = useState<'typing' | 'erasing'>('typing');
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     ticks.start({
@@ -51,6 +52,14 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
     return () => clearInterval(interval);
   }, [mode, typingText.length]);
 
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const handle = () => setIsMobile(mq.matches);
+    handle();
+    mq.addEventListener('change', handle);
+    return () => mq.removeEventListener('change', handle);
+  }, []);
+
   const ringRadius = hovered ? 145 : 115;
   const lines = [
     { text: 'WEBSITES', align: 'text-center md:text-left md:-ml-6 lg:-ml-28' },
@@ -85,16 +94,16 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
       <div className="relative z-10">
         {/* Navbar */}
         <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
-          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
             <motion.div
               animate={{ color: hovered ? '#ffffff' : '#0f172a' }}
               transition={HOVER_TRANSITION}
-              className="text-2xl font-semibold tracking-tight"
+              className="text-2xl font-semibold tracking-tight flex-shrink-0"
             >
               PixlBulilder
             </motion.div>
 
-            <nav className="hidden md:flex items-center justify-end space-x-0 absolute right-20 top-4 w-[140px]">
+            <nav className="hidden md:flex items-center justify-end space-x-0 w-[140px]">
               <ContactModal
                 showTrigger={false}
                 renderTrigger={(open) => (
@@ -110,6 +119,21 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 )}
               />
             </nav>
+            {isMobile && (
+              <div className="md:hidden flex-1 flex justify-end">
+                <ContactModal
+                  showTrigger={false}
+                  renderTrigger={(open) => (
+                    <button
+                      onClick={open}
+                      className="cursor-pointer rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-900 shadow-sm"
+                    >
+                      Contact
+                    </button>
+                  )}
+                />
+              </div>
+            )}
           </div>
         </header>
 
@@ -187,6 +211,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
             </div>
 
             {/* Orb + HUD */}
+            {!isMobile && (
             <div className="relative flex justify-center items-center">
               {/* Rings */}
               <svg
@@ -257,14 +282,22 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
 
               {/* Orb (controls hover) */}
               <motion.div
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-                className="w-56 h-56 md:w-72 md:h-72 rounded-full flex items-center justify-center cursor-pointer relative overflow-hidden z-10"
-                whileHover={{
-                  scale: 1.12,
-                  boxShadow:
-                    '0 0 0 8px rgba(20,184,166,0.15), 0 25px 60px rgba(0,0,0,0.25)',
+                onMouseEnter={() => {
+                  if (!isMobile) setHovered(true);
                 }}
+                onMouseLeave={() => {
+                  if (!isMobile) setHovered(false);
+                }}
+                className="w-56 h-56 md:w-72 md:h-72 rounded-full flex items-center justify-center cursor-pointer relative overflow-hidden z-10"
+                whileHover={
+                  isMobile
+                    ? undefined
+                    : {
+                        scale: 1.12,
+                        boxShadow:
+                          '0 0 0 8px rgba(20,184,166,0.15), 0 25px 60px rgba(0,0,0,0.25)',
+                      }
+                }
                 transition={{ type: 'spring', stiffness: 240, damping: 18 }}
               >
                 <motion.div
@@ -327,6 +360,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 <Pill label="SEO Optimized" active={hovered} />
               </motion.div>
             </div>
+            )}
           </div>
         </div>
       </div>

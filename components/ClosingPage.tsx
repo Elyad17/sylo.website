@@ -45,7 +45,7 @@ export default function ClosingPage() {
         animate={{ opacity: showText ? 1 : 0 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
       >
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
+        <h1 className="font-['Russo_One',_sans-serif] text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
           it's time to
           <br />
           put your business
