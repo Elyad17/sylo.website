@@ -5,6 +5,16 @@
 /* --- Sylo global polish --- */
 :root {
   --sylo-tracking-tight: -0.02em;
+  /* Prevent layout shift when overlays open by reserving scrollbar space */
+  scrollbar-gutter: stable;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body {
+  scrollbar-gutter: stable both-edges;
 }
 
 html,

@@ -29,7 +29,7 @@ export default function ClosingPage() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden min-h-screen pt-28 pb-20 sm:pt-32 sm:pb-24 bg-[#0b1a36] text-[#e8f7ff]"
+      className="relative w-full overflow-hidden min-h-screen pt-28 pb-4 sm:pt-32 sm:pb-6 bg-[#0b1a36] text-[#e8f7ff]"
     >
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
@@ -78,13 +78,13 @@ export default function ClosingPage() {
       <ContactModal open={contactOpen} onOpenChange={setContactOpen} showTrigger={false} />
 
       <motion.div
-        className="pointer-events-none absolute inset-x-0 bottom-4 z-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: footerVisible ? 1 : 0, y: footerVisible ? 0 : 20 }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
+        className="pointer-events-none absolute inset-x-0 bottom-2 z-10"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: footerVisible ? 1 : 0, y: footerVisible ? 0 : 12 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        <div className="relative mx-auto w-full max-w-6xl px-6 sm:px-10">
-          <div className="relative grid grid-cols-3 gap-6 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white/85 sm:text-xs">
+        <div className="relative mx-auto w-fit px-6 sm:px-10">
+          <div className="relative grid grid-cols-3 gap-10 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white/85 sm:text-xs">
             <div className="flex flex-col gap-1 border-r border-white/12 pr-4">
               <span className="text-[11px] text-white/60">Services</span>
               <span>Web Design</span>

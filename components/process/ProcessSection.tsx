@@ -11,7 +11,7 @@ type Step = {
 };
 
 const STEPS: Step[] = [
-  { id: 1, title: 'You send brief' },
+  { id: 1, title: 'You submit brief description' },
   { id: 2, title: 'We make sitemap + wireframe' },
   { id: 3, title: 'You approve' },
   { id: 4, title: 'We make design' },

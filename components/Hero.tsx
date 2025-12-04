@@ -84,7 +84,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
       {/* CONTENT */}
       <div className="relative z-10">
         {/* Navbar */}
-        <header className="absolute top-0 w-full z-50 bg-transparent">
+        <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
             <motion.div
               animate={{ color: hovered ? '#ffffff' : '#0f172a' }}
@@ -94,7 +94,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
               Sylo
             </motion.div>
 
-            <nav className="hidden md:flex items-center space-x-8">
+            <nav className="hidden md:flex items-center justify-end space-x-0 absolute right-20 top-4 w-[140px]">
               <ContactModal
                 showTrigger={false}
                 renderTrigger={(open) => (
@@ -103,7 +103,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                     animate={{ color: hovered ? '#f1f5f9' : '#0f172a' }}
                     whileHover={{ color: hovered ? '#5eead4' : '#0d9488' }}
                     transition={HOVER_TRANSITION}
-                    className="cursor-pointer text-sm font-semibold uppercase tracking-[0.16em]"
+                    className="cursor-pointer text-sm font-semibold uppercase tracking-[0.16em] w-full text-right inline-flex justify-end focus:outline-none focus:ring-0"
                   >
                     Contact
                   </motion.button>

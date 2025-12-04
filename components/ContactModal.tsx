@@ -40,13 +40,8 @@ export default function ContactModal({
   };
 
   useEffect(() => {
-    if (modalOpen) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = prev;
-      };
-    }
+    // Keep scrollbars stable to avoid navbar shift; do not alter overflow.
+    return undefined;
   }, [modalOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -173,10 +168,10 @@ export default function ContactModal({
 
                 {/* Contact details */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <InputField label="Email" required value={email} onChange={setEmail} type="email" />
-                  <InputField label="Phone" value={phone} onChange={setPhone} />
-                  <InputField label="Business name" value={business} onChange={setBusiness} />
-                  <InputField label="Name" required value={name} onChange={setName} />
+                  <InputField placeholder="Email" required value={email} onChange={setEmail} type="email" />
+                  <InputField placeholder="Phone" value={phone} onChange={setPhone} />
+                  <InputField placeholder="Business name" value={business} onChange={setBusiness} />
+                  <InputField placeholder="Name" required value={name} onChange={setName} />
                 </div>
 
                 {/* Notes */}
@@ -212,26 +207,29 @@ export default function ContactModal({
 }
 
 type InputFieldProps = {
-  label: string;
+  label?: string;
+  placeholder?: string;
   value: string;
   onChange: (v: string) => void;
   required?: boolean;
   type?: string;
 };
 
-function InputField({ label, value, onChange, required, type = "text" }: InputFieldProps) {
+function InputField({ label, placeholder, value, onChange, required, type = "text" }: InputFieldProps) {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-semibold text-slate-900">
-        {label} {required ? "*" : ""}
-      </label>
+      {label ? (
+        <label className="text-sm font-semibold text-slate-900">
+          {label} {required ? "*" : ""}
+        </label>
+      ) : null}
       <input
         type={type}
         required={required}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full rounded-md border border-black/15 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
-        placeholder={label}
+        placeholder={placeholder || label}
       />
     </div>
   );
