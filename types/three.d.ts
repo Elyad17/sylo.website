@@ -28,8 +28,14 @@ declare module 'three' {
 
   export class Material {}
 
-  export class Points<TGeometry = BufferGeometry, TMaterial = any> extends Object3D {}
-  export class Mesh<TGeometry = BufferGeometry, TMaterial = any> extends Object3D {}
+  export class Points<TGeometry extends BufferGeometry = BufferGeometry, TMaterial extends Material = Material> extends Object3D {
+    geometry: TGeometry;
+    material: TMaterial;
+  }
+  export class Mesh<TGeometry extends BufferGeometry = BufferGeometry, TMaterial extends Material = Material> extends Object3D {
+    geometry: TGeometry;
+    material: TMaterial;
+  }
   export class RingGeometry extends BufferGeometry {
     constructor(innerRadius?: number, outerRadius?: number, thetaSegments?: number);
   }

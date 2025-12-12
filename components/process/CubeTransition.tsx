@@ -8,8 +8,6 @@ interface CubeTransitionProps {
   active: boolean;
 }
 
-const snapshotSrc = '/pictures/Screenshot%202025-12-04%20at%205.32.57%E2%80%AFPM.png'; // static snapshot in public/pictures
-
 export default function CubeTransition({ progress, active }: CubeTransitionProps) {
   if (!active) return null;
 
@@ -31,7 +29,13 @@ export default function CubeTransition({ progress, active }: CubeTransitionProps
             background: processBg,
           }}
         >
-          <img src={snapshotSrc} alt="Process Snapshot" className="h-full w-full object-cover" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/pictures/process-snapshot.png"
+            alt="Process Snapshot"
+            className="h-full w-full object-cover"
+            loading="eager"
+          />
         </motion.div>
 
         <motion.div

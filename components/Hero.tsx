@@ -103,7 +103,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
               PixlBuilder
             </motion.div>
 
-            <nav className="hidden md:flex items-center justify-end space-x-0 w-[140px]">
+            <nav className="hidden md:flex items-center justify-end space-x-0 min-w-[110px]">
               <ContactModal
                 showTrigger={false}
                 renderTrigger={(open) => (
@@ -138,7 +138,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
         </header>
 
         <div className="pt-24 min-h-[88vh] flex items-center justify-center">
-          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 items-center gap-12">
+          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 items-center gap-10 lg:gap-12">
             {/* Text column */}
             <div className="text-center md:text-left md:pl-2 lg:pl-6 xl:pl-10">
               <div className="space-y-2 md:space-y-3 lg:space-y-4 md:max-w-5xl">
@@ -150,7 +150,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                     transition={{ duration: 0.7, ease: 'easeOut', delay: idx * 0.05 }}
                     className={[
                       "font-['Bree_Serif',_serif]",
-                      'text-[3.8rem] sm:text-[5rem] lg:text-[6.1rem] xl:text-[6.8rem]',
+                      'text-[clamp(3rem,8vw,4.4rem)] sm:text-[clamp(3.6rem,7vw,5.6rem)] lg:text-[clamp(4.4rem,6vw,6.4rem)] xl:text-[clamp(4.8rem,5.5vw,7rem)]',
                       'font-extrabold leading-[0.9] tracking-[-0.05em] uppercase',
                       line.align,
                     ].join(' ')}
@@ -228,10 +228,8 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
             <div className="relative flex justify-center items-center">
               {/* Rings */}
               <svg
-                width="440"
-                height="440"
                 viewBox="0 0 440 440"
-                className="pointer-events-none absolute -z-10"
+                className="pointer-events-none absolute -z-10 w-[clamp(18rem,32vw,28rem)] h-[clamp(18rem,32vw,28rem)]"
                 style={{ opacity: hovered ? 0.85 : 0.4 }}
               >
                 <circle
@@ -301,7 +299,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 onMouseLeave={() => {
                   if (!isMobile) setHovered(false);
                 }}
-                className="w-56 h-56 md:w-72 md:h-72 rounded-full flex items-center justify-center cursor-pointer relative overflow-hidden z-10"
+                className="w-[clamp(11.5rem,22vw,16rem)] h-[clamp(11.5rem,22vw,16rem)] md:w-[clamp(12.5rem,20vw,18rem)] md:h-[clamp(12.5rem,20vw,18rem)] rounded-full flex items-center justify-center cursor-pointer relative overflow-hidden z-10"
                 whileHover={
                   isMobile
                     ? undefined

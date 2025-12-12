@@ -8,6 +8,11 @@ export const metadata: Metadata = {
     'PixlBulilder is a full-service web development agency. We blend creativity and technology to build fast, accessible and visually striking websites.',
 };
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 // Load variable fonts and expose them as CSS variables
 const inter = Inter({
   subsets: ['latin'],

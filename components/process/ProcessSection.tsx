@@ -30,13 +30,18 @@ export function ProcessSection() {
   });
 
   const [progress, setProgress] = useState(0);
-  const [completionProgress, setCompletionProgress] = useState<number | null>(null);
+  const completionProgressRef = useRef<number | null>(null);
+  const lastStepInViewRef = useRef(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
   const lastStepInView = useInView(lastStepRef, {
     amount: 0,
     margin: '0px 0px -50% 0px',
   });
+
+  useEffect(() => {
+    lastStepInViewRef.current = lastStepInView;
+  }, [lastStepInView]);
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)');
@@ -49,19 +54,15 @@ export function ProcessSection() {
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     const clamped = Math.max(0, Math.min(1, v));
     setProgress(clamped);
+
+    const lastStepVisible = lastStepInViewRef.current;
+    const currentCompletion = completionProgressRef.current;
+    if (lastStepVisible && currentCompletion === null) {
+      completionProgressRef.current = clamped;
+    } else if (currentCompletion !== null && clamped < Math.max(currentCompletion - 0.2, 0.4)) {
+      completionProgressRef.current = null;
+    }
   });
-
-  useEffect(() => {
-    if (lastStepInView && completionProgress === null) {
-      setCompletionProgress(progress);
-    }
-  }, [lastStepInView, completionProgress, progress]);
-
-  useEffect(() => {
-    if (completionProgress !== null && progress < Math.max(completionProgress - 0.2, 0.4)) {
-      setCompletionProgress(null);
-    }
-  }, [completionProgress, progress]);
 
   useEffect(() => {
     const t = setTimeout(() => setTimelineReady(true), 120);
@@ -83,11 +84,6 @@ export function ProcessSection() {
 
   // Make the vertical line advance faster so it doesn't lag behind the bar
   const timelineFill = useTransform(scrollYProgress, [0, overlayStart], ['0%', '100%']);
-
-  const nodeProgress = useMemo(
-    () => STEPS.map((_, idx) => (idx + 1) / STEPS.length),
-    []
-  );
 
   return (
     <section
@@ -142,9 +138,7 @@ export function ProcessSection() {
             )}
 
             <div className="relative z-10 space-y-20 sm:space-y-24">
-              {STEPS.map((step, idx) => {
-                const threshold = nodeProgress[idx];
-                const nodeActive = progress >= threshold;
+              {STEPS.map((step) => {
                 return (
                   <motion.div
                     key={step.id}
@@ -178,7 +172,7 @@ export function ProcessSection() {
             </div>
           </div>
         </div>
-        <div ref={lastStepRef} className="mt-24 h-[120vh]" />
+        <div ref={lastStepRef} className="mt-24 h-[70vh] sm:h-[90vh] md:h-[120vh]" />
       </div>
     </section>
   );

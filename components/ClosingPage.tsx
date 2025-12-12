@@ -46,7 +46,7 @@ export default function ClosingPage() {
         transition={{ duration: 0.9, ease: "easeOut" }}
       >
         <h1 className="font-['Russo_One',_sans-serif] text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
-          it's time to
+          it&apos;s time to
           <br />
           put your business
           <br />
@@ -84,20 +84,20 @@ export default function ClosingPage() {
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
         <div className="relative mx-auto w-fit px-6 sm:px-10">
-          <div className="relative grid grid-cols-3 gap-10 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white/85 sm:text-xs">
-            <div className="flex flex-col gap-1 border-r border-white/12 pr-4">
+          <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white/85 sm:text-xs">
+            <div className="flex flex-col gap-1 border-b sm:border-b-0 sm:border-r border-white/12 pb-3 sm:pb-0 sm:pr-4">
               <span className="text-[11px] text-white/60">Services</span>
               <span>Web Design</span>
               <span>Development</span>
               <span>Launch</span>
             </div>
-            <div className="flex flex-col gap-1 border-r border-white/12 px-4">
+            <div className="flex flex-col gap-1 border-b sm:border-b-0 sm:border-r border-white/12 py-3 sm:py-0 sm:px-4">
               <span className="text-[11px] text-white/60">Company</span>
               <span>About</span>
               <span>Process</span>
               <span>Careers</span>
             </div>
-            <div className="flex flex-col gap-1 pl-4">
+            <div className="flex flex-col gap-1 pt-3 sm:pt-0 sm:pl-4">
               <span className="text-[11px] text-white/60">Contact</span>
               <span>hello@sylo.studio</span>
               <span>+1 (310) 555-0123</span>

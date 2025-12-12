@@ -100,7 +100,7 @@ export default function ContactModal({
             />
 
             <motion.div
-              className="relative z-[9999] w-full max-w-3xl overflow-hidden rounded-xl border border-black/5 bg-white p-6 shadow-[0_20px_70px_rgba(0,0,0,0.16)] sm:p-8"
+              className="relative z-[9999] w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-xl border border-black/5 bg-white p-6 shadow-[0_20px_70px_rgba(0,0,0,0.16)] sm:p-8"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -117,12 +117,12 @@ export default function ContactModal({
               </button>
 
               <div className="space-y-2">
-                <h2 className="text-2xl font-semibold text-black sm:text-3xl">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-black leading-tight">
                   Tell us about your project.
                 </h2>
               </div>
 
-              <form onSubmit={handleSubmit} className="mt-6 space-y-6 text-black">
+              <form onSubmit={handleSubmit} className="mt-6 space-y-6 text-black leading-relaxed">
                 {/* Project type */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
@@ -137,7 +137,7 @@ export default function ContactModal({
                           type="button"
                           whileHover={{ scale: 1.03 }}
                           onClick={() => setProjectType(type)}
-                          className={`rounded-full border px-4 py-2 text-sm transition ${
+                          className={`rounded-full border px-4 py-2 text-sm sm:text-base leading-snug transition ${
                             active
                               ? "border-emerald-400 bg-emerald-100/70 text-emerald-900 shadow-[0_10px_30px_rgba(52,211,153,0.25)]"
                               : "border-black/15 bg-white text-slate-700 hover:border-black/30 hover:text-black"

@@ -2,7 +2,6 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
 import { Playfair_Display, Manrope, IBM_Plex_Mono, Orbitron, Alatsi } from 'next/font/google';
 import { HOVER_TRANSITION } from './hoverTheme';
 
@@ -130,7 +129,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.7 }}
             transition={{ duration: 0.45 }}
-            className={`${playfair.className} absolute right-[15%] top-[5%] z-10 -rotate-6 italic`}
+            className={`${playfair.className} absolute right-[15%] top-[5%] z-10 -rotate-6 italic hidden md:block`}
             animate={{
               color: heroHovered ? '#e5f3ff' : '#111827',
             }}
@@ -146,7 +145,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
             initial={{ opacity: 0, y: -6 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.7 }}
-            className={`${mono.className} absolute right-[10.5%] top-[18.5%] z-20 inline-flex items-center gap-2 rounded-full px-5 py-2 text-[0.9rem] -rotate-3`}
+            className={`${mono.className} absolute right-[10.5%] top-[18.5%] z-20 hidden md:inline-flex items-center gap-2 rounded-full px-5 py-2 text-[0.9rem] -rotate-3`}
             animate={{
               backgroundColor: heroHovered ? '#020617' : '#ffffff',
               color: heroHovered ? '#e5f3ff' : '#0f172a',
@@ -210,39 +209,6 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
         </motion.div>
       </div>
     </section>
-  );
-}
-
-function SupportRive() {
-  const { RiveComponent } = useRive({
-    src: '/rive/9445-17946-rocket-without-background.riv',
-    autoplay: true,
-    layout: new Layout({ fit: Fit.Contain, alignment: Alignment.Center }),
-  });
-
-  return (
-    <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-3xl">
-      {RiveComponent ? <RiveComponent style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }} /> : null}
-    </div>
-  );
-}
-
-function SupportRiveWrapper({ parentInView }: { parentInView: boolean }) {
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-  // Trigger after scrolling past the support label by roughly one more bullet distance.
-  const supportInView = useInView(sentinelRef, { amount: 0, margin: '0px 0px -65% 0px' });
-
-  return (
-    <div className="mt-2 w-full">
-      <div ref={sentinelRef} className="h-12 w-px opacity-0" aria-hidden />
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: parentInView && supportInView ? 1 : 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <SupportRive />
-      </motion.div>
-    </div>
   );
 }
 
