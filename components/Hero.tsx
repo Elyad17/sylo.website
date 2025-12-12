@@ -100,7 +100,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
               transition={HOVER_TRANSITION}
               className="text-2xl font-semibold tracking-tight flex-shrink-0"
             >
-              PixlBulilder
+              PixlBuilder
             </motion.div>
 
             <nav className="hidden md:flex items-center justify-end space-x-0 w-[140px]">
