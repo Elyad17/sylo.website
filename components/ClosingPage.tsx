@@ -29,7 +29,7 @@ export default function ClosingPage() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden min-h-screen pt-28 pb-0 sm:pt-32 sm:pb-2 bg-[#0b1a36] text-[#e8f7ff]"
+      className="relative w-full overflow-hidden min-h-screen pt-24 pb-8 sm:pt-32 sm:pb-10 bg-[#0b1a36] text-[#e8f7ff]"
     >
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
@@ -40,19 +40,19 @@ export default function ClosingPage() {
       </motion.div>
 
       <motion.div
-        className="relative z-20 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-start pt-6 px-6 text-center"
+        className="relative z-20 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-start gap-8 pt-8 px-6 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: showText ? 1 : 0 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
       >
-        <h1 className="font-['Russo_One',_sans-serif] text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
+        <h1 className="font-['Russo_One',_sans-serif] text-[clamp(2.6rem,8vw,3.6rem)] sm:text-[clamp(3.2rem,6vw,4.6rem)] lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
           it&apos;s time to
           <br />
           put your business
           <br />
           on the map
         </h1>
-        <div className="mt-14 flex items-center justify-center">
+        <div className="mt-6 sm:mt-12 flex items-center justify-center">
           <div className="relative">
             <div className="pointer-events-none absolute inset-0 rounded-full border border-white/30" />
             <motion.button
@@ -62,7 +62,7 @@ export default function ClosingPage() {
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
               onClick={() => setContactOpen(true)}
-              className="relative flex h-20 w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gradient-to-b from-[#2a9df4] via-[#1b8ce0] to-[#0c6fd4] text-white text-xs font-semibold uppercase tracking-[0.12em] shadow-[0_12px_30px_rgba(12,111,212,0.4)] transition-all duration-700"
+              className="relative flex h-16 w-16 sm:h-20 sm:w-20 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gradient-to-b from-[#2a9df4] via-[#1b8ce0] to-[#0c6fd4] text-white text-[10px] sm:text-xs font-semibold uppercase tracking-[0.12em] shadow-[0_12px_30px_rgba(12,111,212,0.4)] transition-all duration-700"
             >
               <motion.div
                 className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#34d399] via-[#10b981] to-[#0f9a74]"
@@ -78,13 +78,13 @@ export default function ClosingPage() {
       <ContactModal open={contactOpen} onOpenChange={setContactOpen} showTrigger={false} />
 
       <motion.div
-        className="pointer-events-none absolute inset-x-0 bottom-2 z-10"
+        className="z-10 w-full mt-10 sm:mt-0 sm:pointer-events-none sm:absolute sm:inset-x-0 sm:bottom-2"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: footerVisible ? 1 : 0, y: footerVisible ? 0 : 12 }}
         transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        <div className="relative mx-auto w-fit px-6 sm:px-10">
-          <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-10 py-4 text-sm font-semibold uppercase tracking-[0.16em] text-white/85 sm:text-xs">
+        <div className="relative mx-auto w-full max-w-4xl px-6 sm:px-10">
+          <div className="relative grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-10 py-6 text-sm font-semibold uppercase tracking-[0.16em] text-white/85 sm:text-xs text-center sm:text-left">
             <div className="flex flex-col gap-1 border-b sm:border-b-0 sm:border-r border-white/12 pb-3 sm:pb-0 sm:pr-4">
               <span className="text-[11px] text-white/60">Services</span>
               <span>Web Design</span>
