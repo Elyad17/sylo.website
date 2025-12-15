@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import ClosingPage from '../ClosingPage';
+import { ProcessSection } from './ProcessSection';
 
 interface CubeTransitionProps {
   progress: number; // 0..1 scroll-driven
@@ -21,7 +22,7 @@ export default function CubeTransition({ progress, active }: CubeTransitionProps
     <section className="pointer-events-auto fixed inset-0 z-[9999] overflow-hidden" style={{ background: '#000' }}>
       <div className="relative h-full w-full [perspective:1400px]">
         <motion.div
-          className="absolute inset-0"
+          className="absolute inset-0 overflow-hidden"
           style={{
             transformOrigin: `50% 50% -${depth}px`,
             rotateX: processAngle,
@@ -29,13 +30,7 @@ export default function CubeTransition({ progress, active }: CubeTransitionProps
             background: processBg,
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/pictures/process-snapshot.png"
-            alt="Process Snapshot"
-            className="h-full w-full object-cover"
-            loading="eager"
-          />
+          <ProcessSection variant="overlay" />
         </motion.div>
 
         <motion.div

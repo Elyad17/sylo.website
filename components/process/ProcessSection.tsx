@@ -20,7 +20,9 @@ const STEPS: Step[] = [
   { id: 7, title: 'Launch website' },
 ];
 
-export function ProcessSection() {
+type ProcessSectionVariant = 'page' | 'overlay';
+
+export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionVariant }) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const lastStepRef = useRef<HTMLDivElement | null>(null);
   const [timelineReady, setTimelineReady] = useState(false);
@@ -52,6 +54,7 @@ export function ProcessSection() {
   }, []);
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    if (variant !== 'page') return;
     const clamped = Math.max(0, Math.min(1, v));
     setProgress(clamped);
 
@@ -84,6 +87,52 @@ export function ProcessSection() {
 
   // Make the vertical line advance faster so it doesn't lag behind the bar
   const timelineFill = useTransform(scrollYProgress, [0, overlayStart], ['0%', '100%']);
+
+  if (variant === 'overlay') {
+    const totalSteps = STEPS.length;
+    const finalStep = STEPS[STEPS.length - 1];
+    return (
+      <section
+        ref={sectionRef}
+        className="relative w-full pt-0 pb-16 sm:pb-20 text-slate-700"
+        style={{
+          background: '#e5e7eb',
+        }}
+      >
+        <div className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 sm:px-6 md:px-10">
+          <div className="w-full max-w-[980px] rounded-[28px] border border-white/70 bg-white/75 p-6 shadow-[0_30px_80px_rgba(15,23,42,0.12)] backdrop-blur">
+            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+              <span>{`Step ${String(totalSteps).padStart(2, '0')} / ${String(totalSteps).padStart(2, '0')}`}</span>
+              <span>100%</span>
+            </div>
+            <div className="mt-4 h-3 rounded-full bg-slate-200/80">
+              <div className="h-full w-full rounded-full bg-gradient-to-r from-[#43E1BC] via-[#41D8FF] to-[#4A63FF] shadow-[0_10px_30px_rgba(65,216,255,0.35)]" />
+            </div>
+          </div>
+
+          <div className="flex w-full max-w-4xl flex-col items-center justify-center">
+            <div className="h-10 w-[3px] rounded-full bg-[#4b89ff] shadow-[0_0_25px_rgba(77,106,255,0.25)] -mb-1" />
+            <article
+              className="group relative mt-1 w-[88%] max-w-2xl md:w-[58%] rounded-3xl border border-white/60 bg-white/78 px-6 py-8 text-center shadow-[0_25px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl transition duration-300"
+              style={{
+                boxShadow:
+                  '0 16px 50px rgba(15,23,42,0.08), 0 0 25px rgba(77,106,255,0.12)',
+              }}
+            >
+              <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-white/50 ring-offset-0 transition duration-300 group-hover:ring-[#7fb8ff]/80" />
+              <div className="text-lg font-semibold text-slate-900 font-['Noto_Serif_Old_Uyghur',_serif] -mt-1">
+                {finalStep.id}
+              </div>
+              <h3 className="mt-4 font-['Noto_Serif_Old_Uyghur',_serif] text-2xl font-semibold text-slate-900 sm:text-[26px] leading-tight">
+                {finalStep.title}
+              </h3>
+            </article>
+          </div>
+        </div>
+        <div ref={lastStepRef} className="h-px w-px opacity-0" aria-hidden />
+      </section>
+    );
+  }
 
   return (
     <section
