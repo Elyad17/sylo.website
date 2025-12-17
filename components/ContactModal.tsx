@@ -25,7 +25,7 @@ export default function ContactModal({
 }: ContactModalProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [projectType, setProjectType] = useState<ProjectType | null>(null);
-  const [budget, setBudget] = useState<string>("");
+  const [budget, setBudget] = useState<string>("$3,000 – $5,000");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [business, setBusiness] = useState("");
@@ -76,7 +76,7 @@ export default function ContactModal({
             transition={{ duration: 0.35, ease: "easeOut" }}
           >
             <motion.div
-              className="absolute inset-0 bg-white"
+              className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
               onClick={() => setModalOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -156,7 +156,6 @@ export default function ContactModal({
                       className="w-full appearance-none rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-slate-800 shadow-inner shadow-white/60 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
                       style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
                     >
-                      <option value="" className="bg-white text-slate-800">Select budget</option>
                       {BUDGET_OPTIONS.map((opt) => (
                         <option key={opt} value={opt} className="bg-white text-slate-800">
                           {opt}
@@ -173,10 +172,10 @@ export default function ContactModal({
 
                 {/* Contact details */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <InputField name="name" placeholder="Name" required value={name} onChange={setName} />
                   <InputField name="email" placeholder="Email" required value={email} onChange={setEmail} type="email" />
                   <InputField name="phone" placeholder="Phone" value={phone} onChange={setPhone} />
                   <InputField name="business" placeholder="Business name" value={business} onChange={setBusiness} />
-                  <InputField name="name" placeholder="Name" required value={name} onChange={setName} />
                 </div>
 
                 {/* Message */}
