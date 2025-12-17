@@ -43,7 +43,7 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
       </motion.div>
 
       <motion.div
-        className="relative z-20 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-start gap-8 pt-8 px-6 text-center"
+        className="relative z-20 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-start gap-8 pt-8 px-6 text-center md:pt-0 md:-mt-2 lg:-mt-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: showText ? 1 : 0 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
