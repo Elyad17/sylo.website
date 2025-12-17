@@ -31,6 +31,8 @@ export default function ContactModal({
   const [business, setBusiness] = useState("");
   const [name, setName] = useState("");
   const [notes, setNotes] = useState("");
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
+  const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
   const isControlled = useMemo(() => open !== undefined, [open]);
   const modalOpen = isControlled ? !!open : internalOpen;
@@ -52,6 +54,28 @@ export default function ContactModal({
     }
     return undefined;
   }, [modalOpen]);
+
+  useEffect(() => {
+    if (modalOpen) {
+      setAttemptedSubmit(false);
+    }
+  }, [modalOpen]);
+
+  const trimmedName = name.trim();
+  const trimmedEmail = email.trim();
+  const nameInvalid = attemptedSubmit && !trimmedName;
+  const emailInvalid = attemptedSubmit && (!trimmedEmail || !emailRegex.test(trimmedEmail));
+  const emailErrorMessage = !trimmedEmail ? "* Required" : "Enter a valid email";
+
+  const handleSubmit = (e: React.FormEvent) => {
+    if (!trimmedName || !trimmedEmail || !emailRegex.test(trimmedEmail)) {
+      e.preventDefault();
+      setAttemptedSubmit(true);
+      return;
+    }
+    setAttemptedSubmit(false);
+    setModalOpen(false);
+  };
 
   return (
     <>
@@ -111,7 +135,7 @@ export default function ContactModal({
                 action="https://formsubmit.co/jonathanarbittier@pixlbuilder.com"
                 method="POST"
                 className="mt-6 space-y-6 text-black leading-relaxed"
-                onSubmit={() => setModalOpen(false)}
+                onSubmit={handleSubmit}
               >
                 <input type="hidden" name="_subject" value="New website lead from PixlBuilder" />
                 <input type="hidden" name="_next" value="https://pixlbuilder.com/thank-you" />
@@ -172,8 +196,25 @@ export default function ContactModal({
 
                 {/* Contact details */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <InputField name="name" placeholder="Name" required value={name} onChange={setName} />
-                  <InputField name="email" placeholder="Email" required value={email} onChange={setEmail} type="email" />
+                  <InputField
+                    name="name"
+                    placeholder="Name"
+                    required
+                    value={name}
+                    onChange={setName}
+                    invalid={nameInvalid}
+                    errorMessage="* Required"
+                  />
+                  <InputField
+                    name="email"
+                    placeholder="Email"
+                    required
+                    value={email}
+                    onChange={setEmail}
+                    type="email"
+                    invalid={emailInvalid}
+                    errorMessage={emailErrorMessage}
+                  />
                   <InputField name="phone" placeholder="Phone" value={phone} onChange={setPhone} />
                   <InputField name="business" placeholder="Business name" value={business} onChange={setBusiness} />
                 </div>
@@ -196,12 +237,16 @@ export default function ContactModal({
                 <motion.button
                   whileHover={{ scale: 1.01 }}
                   type="submit"
-                  disabled={!email || !name}
                   className="relative w-full rounded-full border border-black/10 bg-gradient-to-r from-emerald-300 to-emerald-500 py-3 text-center text-base font-medium text-black shadow-[0_12px_40px_rgba(16,185,129,0.35)] transition hover:shadow-[0_14px_60px_rgba(16,185,129,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Submit Request
                 </motion.button>
                 </div>
+                {attemptedSubmit && (nameInvalid || emailInvalid) ? (
+                  <p className="text-center text-sm font-medium text-red-600">
+                    Please fix the highlighted fields before submitting.
+                  </p>
+                ) : null}
               </form>
             </motion.div>
           </motion.div>
@@ -219,9 +264,21 @@ type InputFieldProps = {
   onChange: (v: string) => void;
   required?: boolean;
   type?: string;
+  invalid?: boolean;
+  errorMessage?: string;
 };
 
-function InputField({ label, placeholder, value, onChange, required, type = "text", name }: InputFieldProps) {
+function InputField({
+  label,
+  placeholder,
+  value,
+  onChange,
+  required,
+  type = "text",
+  name,
+  invalid,
+  errorMessage,
+}: InputFieldProps) {
   return (
     <div className="space-y-2">
       {label ? (
@@ -235,9 +292,17 @@ function InputField({ label, placeholder, value, onChange, required, type = "tex
         name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-md border border-black/15 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+        aria-invalid={invalid ? "true" : undefined}
+        className={`w-full rounded-md border bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition ${
+          invalid
+            ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-200"
+            : "border-black/15 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
+        }`}
         placeholder={placeholder || label}
       />
+      {invalid && errorMessage ? (
+        <p className="text-xs font-medium text-red-600">{errorMessage}</p>
+      ) : null}
     </div>
   );
 }
