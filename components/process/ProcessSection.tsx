@@ -189,15 +189,8 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
             <div className="relative z-10 space-y-20 sm:space-y-24">
               {STEPS.map((step) => {
                 return (
-                  <motion.div
-                    key={step.id}
-                    initial={{ opacity: 0, y: 26 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.45, ease: 'easeOut' }}
-                    viewport={{ once: true, amount: 0.35 }}
-                    className="relative flex w-full justify-center"
-                  >
-                    <motion.article
+                  <div key={step.id} className="relative flex w-full justify-center">
+                    <article
                       className="group relative w-[88%] max-w-2xl md:w-[58%] rounded-3xl border border-white/60 bg-white/85 px-6 py-8 text-center shadow-[0_25px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl transition duration-300 hover:-translate-y-1 hover:shadow-[0_30px_90px_rgba(77,106,255,0.16)]"
                       style={{
                         boxShadow:
@@ -214,8 +207,8 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
                       <h3 className="mt-4 font-['Noto_Serif_Old_Uyghur',_serif] text-2xl font-semibold text-slate-900 sm:text-[26px]">
                         {step.title}
                       </h3>
-                    </motion.article>
-                  </motion.div>
+                    </article>
+                  </div>
                 );
               })}
             </div>

@@ -30,7 +30,7 @@ export default function ContactModal({
   const [phone, setPhone] = useState("");
   const [business, setBusiness] = useState("");
   const [name, setName] = useState("");
-  const [notes, setNotes] = useState("");
+  const [message, setMessage] = useState("");
 
   const isControlled = useMemo(() => open !== undefined, [open]);
   const modalOpen = isControlled ? !!open : internalOpen;
@@ -52,21 +52,6 @@ export default function ContactModal({
     }
     return undefined;
   }, [modalOpen]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !name) return;
-    console.log({
-      projectType,
-      budget,
-      email,
-      phone,
-      business,
-      name,
-      notes,
-    });
-    setModalOpen(false);
-  };
 
   return (
     <>
@@ -122,7 +107,17 @@ export default function ContactModal({
                 </h2>
               </div>
 
-              <form onSubmit={handleSubmit} className="mt-6 space-y-6 text-black leading-relaxed">
+              <form
+                action="https://formsubmit.co/jonathanarbittier@pixlbuilder.com"
+                method="POST"
+                className="mt-6 space-y-6 text-black leading-relaxed"
+                onSubmit={() => setModalOpen(false)}
+              >
+                <input type="hidden" name="_subject" value="New website lead from PixlBuilder" />
+                <input type="hidden" name="_next" value="https://pixlbuilder.com/thank-you" />
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="text" name="_honey" className="hidden" tabIndex={-1} autoComplete="off" />
+                <input type="hidden" name="projectType" value={projectType ?? ""} />
                 {/* Project type */}
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
@@ -156,6 +151,7 @@ export default function ContactModal({
                   <div className="relative">
                     <select
                       value={budget}
+                      name="budget"
                       onChange={(e) => setBudget(e.target.value)}
                       className="w-full appearance-none rounded-xl border border-black/10 bg-white px-4 py-3 text-base text-slate-800 shadow-inner shadow-white/60 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
                       style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
@@ -177,19 +173,21 @@ export default function ContactModal({
 
                 {/* Contact details */}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <InputField placeholder="Email" required value={email} onChange={setEmail} type="email" />
-                  <InputField placeholder="Phone" value={phone} onChange={setPhone} />
-                  <InputField placeholder="Business name" value={business} onChange={setBusiness} />
-                  <InputField placeholder="Name" required value={name} onChange={setName} />
+                  <InputField name="email" placeholder="Email" required value={email} onChange={setEmail} type="email" />
+                  <InputField name="phone" placeholder="Phone" value={phone} onChange={setPhone} />
+                  <InputField name="business" placeholder="Business name" value={business} onChange={setBusiness} />
+                  <InputField name="name" placeholder="Name" required value={name} onChange={setName} />
                 </div>
 
-                {/* Notes */}
+                {/* Message */}
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-900">Tell us more (optional)</label>
+                  <label className="text-sm font-semibold text-slate-900">Message</label>
                   <textarea
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
+                    name="message"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     rows={4}
+                    required
                     className="w-full rounded-md border border-black/15 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
                     placeholder="Project goals, timeline, references..."
                   />
@@ -200,7 +198,7 @@ export default function ContactModal({
                 <motion.button
                   whileHover={{ scale: 1.01 }}
                   type="submit"
-                  disabled={!email || !name}
+                  disabled={!email || !name || !message}
                   className="relative w-full rounded-full border border-black/10 bg-gradient-to-r from-emerald-300 to-emerald-500 py-3 text-center text-base font-medium text-black shadow-[0_12px_40px_rgba(16,185,129,0.35)] transition hover:shadow-[0_14px_60px_rgba(16,185,129,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Submit Request
@@ -218,13 +216,14 @@ export default function ContactModal({
 type InputFieldProps = {
   label?: string;
   placeholder?: string;
+  name?: string;
   value: string;
   onChange: (v: string) => void;
   required?: boolean;
   type?: string;
 };
 
-function InputField({ label, placeholder, value, onChange, required, type = "text" }: InputFieldProps) {
+function InputField({ label, placeholder, value, onChange, required, type = "text", name }: InputFieldProps) {
   return (
     <div className="space-y-2">
       {label ? (
@@ -235,6 +234,7 @@ function InputField({ label, placeholder, value, onChange, required, type = "tex
       <input
         type={type}
         required={required}
+        name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="w-full rounded-md border border-black/15 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
