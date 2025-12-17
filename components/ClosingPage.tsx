@@ -17,7 +17,7 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
 
   useEffect(() => {
     if (inView) {
-      const timer = window.setTimeout(() => setShowText(true), 1500);
+      const timer = window.setTimeout(() => setShowText(true), 1000);
       return () => window.clearTimeout(timer);
     }
   }, [inView]);

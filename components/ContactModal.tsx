@@ -30,7 +30,7 @@ export default function ContactModal({
   const [phone, setPhone] = useState("");
   const [business, setBusiness] = useState("");
   const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
+  const [notes, setNotes] = useState("");
 
   const isControlled = useMemo(() => open !== undefined, [open]);
   const modalOpen = isControlled ? !!open : internalOpen;
@@ -147,7 +147,7 @@ export default function ContactModal({
 
                 {/* Budget */}
                 <div className="space-y-2">
-                  <label className="block text-sm font-semibold text-slate-900">Budget (optional)</label>
+                  <label className="block text-sm font-semibold text-slate-900">Budget</label>
                   <div className="relative">
                     <select
                       value={budget}
@@ -178,15 +178,14 @@ export default function ContactModal({
                   <InputField name="business" placeholder="Business name" value={business} onChange={setBusiness} />
                 </div>
 
-                {/* Message */}
+                {/* Notes */}
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-900">Message</label>
+                  <label className="text-sm font-semibold text-slate-900">Tell us about your project (optional)</label>
                   <textarea
                     name="message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
                     rows={4}
-                    required
                     className="w-full rounded-md border border-black/15 bg-white px-3 py-2 text-sm text-slate-800 placeholder-slate-400 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200"
                     placeholder="Project goals, timeline, references..."
                   />
@@ -197,7 +196,7 @@ export default function ContactModal({
                 <motion.button
                   whileHover={{ scale: 1.01 }}
                   type="submit"
-                  disabled={!email || !name || !message}
+                  disabled={!email || !name}
                   className="relative w-full rounded-full border border-black/10 bg-gradient-to-r from-emerald-300 to-emerald-500 py-3 text-center text-base font-medium text-black shadow-[0_12px_40px_rgba(16,185,129,0.35)] transition hover:shadow-[0_14px_60px_rgba(16,185,129,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   Submit Request
