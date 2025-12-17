@@ -144,7 +144,7 @@ function ClockBackground() {
         height="110vmin"
         viewBox="0 0 200 200"
         fill="none"
-        className="absolute left-1/2 -top-6 -translate-x-1/2"
+        className="absolute left-1/2 top-16 -translate-x-1/2 md:-top-6"
       >
         {Array.from({ length: 60 }).map((_, i) => {
           const angle = (i / 60) * Math.PI * 2;
