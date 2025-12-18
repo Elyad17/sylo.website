@@ -22,7 +22,7 @@ export default function CubeTransition({ progress, active }: CubeTransitionProps
     <section className="pointer-events-auto fixed inset-0 z-[9999] overflow-hidden" style={{ background: '#000' }}>
       <div className="relative h-full w-full [perspective:1400px] [transform-style:preserve-3d]">
         <m.div
-          className="absolute inset-0 overflow-hidden [transform-style:preserve-3d]"
+          className="absolute inset-0 overflow-hidden will-change-transform [transform-style:preserve-3d]"
           style={{
             transformOrigin: `50% 50% -${depth}px`,
             rotateX: processAngle,
@@ -35,7 +35,7 @@ export default function CubeTransition({ progress, active }: CubeTransitionProps
         </m.div>
 
         <m.div
-          className="absolute inset-0 [transform-style:preserve-3d]"
+          className="absolute inset-0 will-change-transform [transform-style:preserve-3d]"
           style={{
             transformOrigin: `50% 50% -${depth}px`,
             rotateX: closingAngle,

@@ -5,11 +5,11 @@ import { m, useScroll, useTransform, useInView } from 'framer-motion';
 import { Playfair_Display, Manrope, IBM_Plex_Mono, Orbitron, Alatsi } from 'next/font/google';
 import { HOVER_TRANSITION } from './hoverTheme';
 
-const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '700'] });
-const manrope = Manrope({ subsets: ['latin'], weight: ['700', '800'] });
-const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '600'] });
-const orbitron = Orbitron({ subsets: ['latin'], weight: ['700'] });
-const alatsi = Alatsi({ subsets: ['latin'], weight: ['400'] });
+const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '700'], preload: false });
+const manrope = Manrope({ subsets: ['latin'], weight: ['700', '800'], preload: false });
+const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '600'], preload: false });
+const orbitron = Orbitron({ subsets: ['latin'], weight: ['700'], preload: false });
+const alatsi = Alatsi({ subsets: ['latin'], weight: ['400'], preload: false });
 
 const ORANGE = '#FF6A00';
 

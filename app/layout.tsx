@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk, JetBrains_Mono, Bree_Serif, Geo, Noto_Serif_Old_Uyghur } from 'next/font/google';
+import { Inter, JetBrains_Mono, Bree_Serif, Geo, Noto_Serif_Old_Uyghur } from 'next/font/google';
 import Providers from './Providers';
 
 export const metadata: Metadata = {
@@ -27,13 +27,6 @@ export const viewport = {
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
-  display: 'swap',
-});
-
-const grotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-display',
   display: 'swap',
 });
 
@@ -73,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${grotesk.variable} ${mono.variable} ${breeSerif.variable} ${geo.variable} ${notoOldUyghur.variable}`}
+      className={`${inter.variable} ${mono.variable} ${breeSerif.variable} ${geo.variable} ${notoOldUyghur.variable}`}
     >
       {/* Default to Inter; use font-display or font-mono in components as needed */}
       <body className="font-sans antialiased">

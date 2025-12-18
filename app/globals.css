@@ -78,6 +78,7 @@ h3 {
   color: currentColor;
   overflow: hidden;
   pointer-events: none;
+  will-change: transform;
 }
 
 /* top slice */
