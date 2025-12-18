@@ -71,7 +71,15 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
   const fade = useTransform(heroProg, [0, 1], [1, 0.96]);
 
   const words = useMemo(
-    () => ['Design', 'Animation', 'SEO', 'Performance', 'CRO', 'CMS', 'Support'],
+    () => [
+      'Design',
+      'Animation',
+      'Google Optimization',
+      'Performance',
+      'Sales-Focused Design',
+      'Content Management',
+      'Support',
+    ],
     []
   );
 
