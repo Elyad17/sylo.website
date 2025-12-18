@@ -69,6 +69,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
   const { scrollYProgress: heroProg } = useScroll({ target: heroRef, offset: HERO_OFFSET });
   const skew = useTransform(heroProg, [0, 1], [0, -4]);
   const fade = useTransform(heroProg, [0, 1], [1, 0.96]);
+  const scrambleActive = useInView(heroRef, { amount: 0, margin: '600px 0px' });
 
   const words = useMemo(
     () => [
@@ -124,7 +125,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
               animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
               transition={HOVER_TRANSITION}
             >
-              <ScrambleWord />
+              <ScrambleWord active={scrambleActive} />
             </m.div>
           </div>
 
@@ -241,7 +242,7 @@ function usePrefersReducedMotion() {
 
 type DisplayChar = { char: string; dud: boolean };
 
-function ScrambleWord() {
+function ScrambleWord({ active }: { active: boolean }) {
   const pad = (word: string) => word.padEnd(SCRAMBLE_MAX, '\u00A0');
   const [display, setDisplay] = useState<DisplayChar[]>(
     pad(SCRAMBLE_WORDS[0]).split('').map((c) => ({ char: c, dud: false })),
@@ -250,14 +251,16 @@ function ScrambleWord() {
   const reduceMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    // Avoid running the scramble loop until the section is near the viewport (saves CPU/TBT on mobile).
+    if (!active) return;
     let raf: number | undefined;
     let timeout: number | undefined;
-    let active = true;
+    let running = true;
 
     const holdDuration = 2000;
 
     const runScramble = () => {
-      if (!active) return;
+      if (!running) return;
       const current = indexRef.current;
       const next = (current + 1) % SCRAMBLE_WORDS.length;
       const from = pad(SCRAMBLE_WORDS[current]);
@@ -287,7 +290,7 @@ function ScrambleWord() {
       let frame = 0;
 
       const update = () => {
-        if (!active) return;
+        if (!running) return;
         let complete = 0;
         const out: DisplayChar[] = [];
 
@@ -324,11 +327,11 @@ function ScrambleWord() {
     timeout = window.setTimeout(runScramble, holdDuration);
 
     return () => {
-      active = false;
+      running = false;
       if (raf !== undefined) cancelAnimationFrame(raf);
       if (timeout !== undefined) clearTimeout(timeout);
     };
-  }, [reduceMotion]);
+  }, [reduceMotion, active]);
 
   const dataText = display.map((c) => c.char).join('').replace(/\u00A0/g, ' ');
 

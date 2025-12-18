@@ -16,13 +16,14 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
   const [visibleText, setVisibleText] = useState('');
   const [eraseCount, setEraseCount] = useState(0);
   const [mode, setMode] = useState<'typing' | 'erasing'>('typing');
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    ticks.start({
-      rotate: 360,
-      transition: { duration: 18, ease: 'linear', repeat: Infinity },
-    });
+    if (window.matchMedia('(min-width: 768px)').matches) {
+      ticks.start({
+        rotate: 360,
+        transition: { duration: 18, ease: 'linear', repeat: Infinity },
+      });
+    }
   }, [ticks]);
 
   useEffect(() => {
@@ -51,14 +52,6 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
 
     return () => clearInterval(interval);
   }, [mode, typingText.length]);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)');
-    const handle = () => setIsMobile(mq.matches);
-    handle();
-    mq.addEventListener('change', handle);
-    return () => mq.removeEventListener('change', handle);
-  }, []);
 
   const ringRadius = hovered ? 145 : 115;
   const lines = [
@@ -119,21 +112,19 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 )}
               />
             </nav>
-            {isMobile && (
-              <div className="md:hidden flex-1 flex justify-end">
-                <ContactModal
-                  showTrigger={false}
-                  renderTrigger={(open) => (
-                    <button
-                      onClick={open}
-                      className="cursor-pointer rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-900 shadow-sm"
-                    >
-                      Contact
-                    </button>
-                  )}
-                />
-              </div>
-            )}
+            <div className="md:hidden flex-1 flex justify-end">
+              <ContactModal
+                showTrigger={false}
+                renderTrigger={(open) => (
+                  <button
+                    onClick={open}
+                    className="cursor-pointer rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-900 shadow-sm"
+                  >
+                    Contact
+                  </button>
+                )}
+              />
+            </div>
           </div>
         </header>
 
@@ -228,8 +219,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
             </div>
 
             {/* Orb + HUD */}
-            {!isMobile && (
-            <div className="relative flex justify-center items-center">
+            <div className="relative hidden md:flex justify-center items-center">
               {/* Rings */}
               <svg
                 viewBox="0 0 440 440"
@@ -298,21 +288,16 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
               {/* Orb (controls hover) */}
               <m.div
                 onMouseEnter={() => {
-                  if (!isMobile) setHovered(true);
+                  setHovered(true);
                 }}
                 onMouseLeave={() => {
-                  if (!isMobile) setHovered(false);
+                  setHovered(false);
                 }}
                 className="w-[clamp(11.5rem,22vw,16rem)] h-[clamp(11.5rem,22vw,16rem)] md:w-[clamp(12.5rem,20vw,18rem)] md:h-[clamp(12.5rem,20vw,18rem)] rounded-full flex items-center justify-center cursor-pointer relative overflow-hidden z-10"
-                whileHover={
-                  isMobile
-                    ? undefined
-                    : {
-                        scale: 1.12,
-                        boxShadow:
-                          '0 0 0 8px rgba(20,184,166,0.15), 0 25px 60px rgba(0,0,0,0.25)',
-                      }
-                }
+                whileHover={{
+                  scale: 1.12,
+                  boxShadow: '0 0 0 8px rgba(20,184,166,0.15), 0 25px 60px rgba(0,0,0,0.25)',
+                }}
                 transition={{ type: 'spring', stiffness: 240, damping: 18 }}
               >
                 <m.div
@@ -375,7 +360,6 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 <Pill label="SEO Optimized" active={hovered} />
               </m.div>
             </div>
-            )}
           </div>
         </div>
       </div>

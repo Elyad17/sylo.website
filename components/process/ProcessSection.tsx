@@ -2,8 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { m, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
-import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
-import CubeTransition from './CubeTransition';
+import dynamic from 'next/dynamic';
 
 type Step = {
   id: number;
@@ -22,6 +21,9 @@ const STEPS: Step[] = [
 
 type ProcessSectionVariant = 'page' | 'overlay';
 
+const ProcessRive = dynamic(() => import('./ProcessRive'), { ssr: false });
+const CubeTransition = dynamic(() => import('./CubeTransition'), { ssr: false });
+
 export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionVariant }) {
   const sectionRef = useRef<HTMLElement | null>(null);
   const lastStepRef = useRef<HTMLDivElement | null>(null);
@@ -35,6 +37,9 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
   const completionProgressRef = useRef<number | null>(null);
   const lastStepInViewRef = useRef(false);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  const sectionNearViewport = useInView(sectionRef, { amount: 0, margin: '900px 0px' });
+  const [loadRive, setLoadRive] = useState(false);
 
   const lastStepInView = useInView(lastStepRef, {
     amount: 0,
@@ -52,6 +57,15 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
     mq.addEventListener('change', handle);
     return () => mq.removeEventListener('change', handle);
   }, []);
+
+  useEffect(() => {
+    if (variant !== 'page') return;
+    if (sectionNearViewport) setLoadRive(true);
+  }, [sectionNearViewport, variant]);
+
+  useEffect(() => {
+    if (isDesktop) void import('./CubeTransition');
+  }, [isDesktop]);
 
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     if (variant !== 'page') return;
@@ -79,14 +93,13 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
   const targetProgress = overlayStart; // bar hits 100 when rotation begins
   const normalizedProgress = Math.min(targetProgress > 0 ? progress / targetProgress : 0, 1);
   const computedFill = Math.min(normalizedProgress * 100, 100);
-  const barWidth = `${computedFill}%`;
   const progressPercent = useMemo(() => Math.round(computedFill), [computedFill]);
 
   const overlayProgress = Math.min(Math.max((progress - overlayStart) / overlaySpan, 0), 1);
   const overlayActive = isDesktop && overlayProgress > 0 && overlayProgress <= 1;
 
   // Make the vertical line advance faster so it doesn't lag behind the bar
-  const timelineFill = useTransform(scrollYProgress, [0, overlayStart], ['0%', '100%']);
+  const timelineFillScale = useTransform(scrollYProgress, [0, overlayStart], [0, 1], { clamp: true });
 
   if (variant === 'overlay') {
     const totalSteps = STEPS.length;
@@ -147,7 +160,7 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
       <div className="mx-auto max-w-5xl px-6 md:px-10">
         <div className="flex flex-col items-center text-center">
           <div className="mb-4 h-50 w-50 md:h-54 md:w-54">
-            <ProcessRive />
+            {loadRive ? <ProcessRive /> : null}
           </div>
           <h2 className="font-serif text-4xl font-semibold text-slate-900 sm:text-5xl">
             Steps to launch
@@ -162,8 +175,8 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
             </div>
             <div className="mt-4 h-3 rounded-full bg-slate-200/80">
               <m.div
-                className="h-full rounded-full bg-gradient-to-r from-[#43E1BC] via-[#41D8FF] to-[#4A63FF] shadow-[0_10px_30px_rgba(65,216,255,0.35)]"
-                style={{ width: barWidth }}
+                className="h-full w-full origin-left rounded-full bg-gradient-to-r from-[#43E1BC] via-[#41D8FF] to-[#4A63FF] shadow-[0_10px_30px_rgba(65,216,255,0.35)] will-change-transform"
+                style={{ scaleX: normalizedProgress }}
               />
             </div>
           </div>
@@ -177,11 +190,11 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
                   style={{ left: '50%', marginLeft: '-0.5px' }}
                 />
                 <m.div
-                  className="pointer-events-none absolute top-0 z-0 w-[3px] rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)]"
+                  className="pointer-events-none absolute top-0 z-0 h-full w-[3px] origin-top rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)] will-change-transform"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.4, ease: 'easeOut' }}
-                  style={{ height: timelineFill, left: '50%', marginLeft: '-1.5px' }}
+                  style={{ scaleY: timelineFillScale, left: '50%', marginLeft: '-1.5px' }}
                 />
               </>
             )}
@@ -218,16 +231,4 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
       </div>
     </section>
   );
-}
-
-function ProcessRive() {
-  const { RiveComponent } = useRive({
-    src: '/rive/9445-17946-rocket-without-background.riv',
-    autoplay: true,
-    layout: new Layout({ fit: Fit.Contain, alignment: Alignment.Center }),
-  });
-
-  if (!RiveComponent) return null;
-
-  return <RiveComponent style={{ width: '100%', height: '100%', backgroundColor: 'transparent' }} />;
 }

@@ -39,7 +39,7 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
         animate={{ opacity: showText ? 0.35 : 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <ClockBackground />
+        <ClockBackground active={inView} />
       </m.div>
 
       <m.div
@@ -113,12 +113,13 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
   );
 }
 
-function ClockBackground() {
+function ClockBackground({ active }: { active: boolean }) {
   const hourRef = useRef<SVGLineElement | null>(null);
   const minuteRef = useRef<SVGLineElement | null>(null);
   const secondRef = useRef<SVGLineElement | null>(null);
 
   useEffect(() => {
+    if (!active) return;
     let frame: number;
     const tick = () => {
       const now = new Date();
@@ -135,7 +136,7 @@ function ClockBackground() {
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, []);
+  }, [active]);
 
   return (
     <div className="pointer-events-none absolute inset-0 z-0">
