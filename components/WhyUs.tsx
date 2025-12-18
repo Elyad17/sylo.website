@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import { m, useScroll, useTransform, useInView } from 'framer-motion';
 import { Playfair_Display, Manrope, IBM_Plex_Mono, Orbitron, Alatsi } from 'next/font/google';
 import { HOVER_TRANSITION } from './hoverTheme';
 
@@ -32,7 +32,7 @@ const BulletRow: React.FC<BulletRowProps> = ({ label, heroHovered }) => {
   return (
     <li ref={liRef} className="flex flex-col gap-2">
       <div className="flex items-center gap-4">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scaleY: 0.4 }}
           animate={{ opacity: inView ? 1 : 0, scaleY: inView ? 1 : 0.4 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
@@ -43,7 +43,7 @@ const BulletRow: React.FC<BulletRowProps> = ({ label, heroHovered }) => {
           }}
         />
 
-        <motion.span
+        <m.span
           initial={{ opacity: 0, y: 8 }}
           animate={{
             opacity: inView ? 1 : 0,
@@ -54,7 +54,7 @@ const BulletRow: React.FC<BulletRowProps> = ({ label, heroHovered }) => {
           className={`${alatsi.className} block select-none text-[22px] md:text-[28px] font-bold tracking-[-0.02em]`}
         >
           {label}
-        </motion.span>
+        </m.span>
       </div>
 
       {label === 'Support' && null}
@@ -86,7 +86,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
   return (
     <section id="why-us" className="relative w-full overflow-hidden pt-36 md:pt-48 pb-32 md:pb-44">
       {/* light background – same as hero default */}
-      <motion.div
+      <m.div
         className="absolute inset-0 -z-10"
         style={{ backgroundColor: '#ffffff' }}
         animate={{ opacity: heroHovered ? 0 : 1 }}
@@ -94,23 +94,20 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
       />
 
       {/* dark background – same as hero hovered */}
-      <motion.div
+      <m.div
         className="absolute inset-0 -z-10"
         style={{ backgroundColor: '#020617' }}
         animate={{ opacity: heroHovered ? 1 : 0 }}
         transition={HOVER_TRANSITION}
       />
 
-      <div
-        ref={heroRef}
-        className="relative mx-auto max-w-[1400px] px-6 py-[12vh]"
-      >
-        <motion.div style={{ skewY: skew, opacity: fade }} className="relative">
+      <div ref={heroRef} className="relative mx-auto max-w-[1400px] px-6 py-[12vh]">
+        <m.div style={{ skewY: skew, opacity: fade }} className="relative">
           {/* DIGITAL / PRESENCE headline */}
           <div className="relative">
             {/* DIGITAL with glitch */}
             <div className="relative w-fit">
-              <motion.h2
+              <m.h2
                 className={`${manrope.className} block select-none leading-[0.85] font-extrabold tracking-[-0.06em] text-[13vw] md:text-[8.2vw]`}
                 animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
                 transition={HOVER_TRANSITION}
@@ -118,21 +115,21 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
                 <span className="digital-glitch" data-text="DIGITAL">
                   DIGITAL
                 </span>
-              </motion.h2>
+              </m.h2>
             </div>
 
             {/* PRESENCE with glitch */}
-            <motion.div
+            <m.div
               className={`${manrope.className} mt-[1.4vw] select-none leading-[0.86] font-extrabold tracking-[-0.07em] text-[17vw] md:text-[10.6vw] relative w-fit`}
               animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
               transition={HOVER_TRANSITION}
             >
               <ScrambleWord />
-            </motion.div>
+            </m.div>
           </div>
 
           {/* "why us?" label */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.7 }}
@@ -147,9 +144,9 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
             }}
           >
             why&nbsp;us?
-          </motion.div>
+          </m.div>
 
-          <motion.span
+          <m.span
             initial={{ opacity: 0, y: -6 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.7 }}
@@ -166,7 +163,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
               letterSpacing: '0.03em',
             }}
           >
-            <motion.span
+            <m.span
               className="text-[0.82rem]"
               animate={{
                 color: heroHovered ? '#e5e7eb' : '#4b5563',
@@ -174,8 +171,8 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
               transition={HOVER_TRANSITION}
             >
               *because we put
-            </motion.span>
-            <motion.span
+            </m.span>
+            <m.span
               className="inline-flex items-center rounded-full px-3 py-1 text-[0.78rem] font-bold uppercase tracking-[0.18em]"
               animate={{
                 backgroundColor: heroHovered ? '#fb923c' : ORANGE,
@@ -187,14 +184,14 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
               transition={HOVER_TRANSITION}
             >
               YOU&nbsp;FIRST
-            </motion.span>
-          </motion.span>
+            </m.span>
+          </m.span>
 
           {/* What we offer + bullets */}
           <div className="relative mt-[8.2vh] md:mt-[8.8vh]">
             <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-[0.92fr_1.08fr]">
               <div className="flex items-start md:justify-end">
-                <motion.h3
+                <m.h3
                   className={`${orbitron.className} text-[9.2vw] leading-[0.9] md:text-[4.8vw] md:leading-[0.9] font-extrabold tracking-[-0.045em] text-left md:text-right`}
                   animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
                   transition={HOVER_TRANSITION}
@@ -202,7 +199,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
                   What
                   <br className="hidden md:block" />
                   we&nbsp;offer
-                </motion.h3>
+                </m.h3>
               </div>
 
               <div className="relative">
@@ -214,7 +211,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
               </div>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

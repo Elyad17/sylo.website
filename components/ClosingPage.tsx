@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { m, useInView } from "framer-motion";
 import ContactModal from "./ContactModal";
 
 type ClosingVariant = 'page' | 'overlay';
@@ -34,15 +34,15 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
       ref={sectionRef}
       className="relative w-full overflow-hidden min-h-screen pt-24 pb-8 sm:pt-32 sm:pb-10 bg-[#0b1a36] text-[#e8f7ff]"
     >
-      <motion.div
+      <m.div
         className="pointer-events-none absolute inset-0 z-0"
         animate={{ opacity: showText ? 0.35 : 1 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <ClockBackground />
-      </motion.div>
+      </m.div>
 
-      <motion.div
+      <m.div
         className="relative z-20 mx-auto flex min-h-[70vh] max-w-4xl flex-col items-center justify-start gap-8 pt-8 px-6 text-center md:pt-0 md:-mt-2 lg:-mt-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: showText ? 1 : 0 }}
@@ -58,7 +58,7 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
         <div className="mt-6 sm:mt-12 flex items-center justify-center">
           <div className="relative">
             <div className="pointer-events-none absolute inset-0 rounded-full border border-white/30" />
-            <motion.button
+            <m.button
               onHoverStart={() => !isOverlay && setCtaHover(true)}
               onHoverEnd={() => !isOverlay && setCtaHover(false)}
               whileHover={isOverlay ? undefined : { scale: 1.05, boxShadow: "0 18px 50px rgba(16,185,129,0.45)" }}
@@ -67,20 +67,20 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
               onClick={isOverlay ? undefined : () => setContactOpen(true)}
               className={`relative flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center overflow-hidden rounded-full bg-gradient-to-b from-[#2a9df4] via-[#1b8ce0] to-[#0c6fd4] text-white text-[10px] sm:text-xs font-semibold uppercase tracking-[0.12em] shadow-[0_12px_30px_rgba(12,111,212,0.4)] transition-all duration-700 ${isOverlay ? 'pointer-events-none opacity-90' : 'cursor-pointer'}`}
             >
-              <motion.div
+              <m.div
                 className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#34d399] via-[#10b981] to-[#0f9a74]"
                 animate={{ opacity: ctaHover ? 1 : 0 }}
                 transition={{ duration: 1.2, ease: "easeInOut" }}
               />
               <span className="relative z-10">get started</span>
-            </motion.button>
+            </m.button>
           </div>
         </div>
-      </motion.div>
+      </m.div>
 
       {isOverlay ? null : <ContactModal open={contactOpen} onOpenChange={setContactOpen} showTrigger={false} />}
 
-      <motion.div
+      <m.div
         className="z-10 w-full mt-10 sm:mt-0 sm:pointer-events-none sm:absolute sm:inset-x-0 sm:bottom-2"
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: footerVisible ? 1 : 0, y: footerVisible ? 0 : 12 }}
@@ -108,7 +108,7 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

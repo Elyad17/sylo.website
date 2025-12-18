@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { motion, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import { m, useInView, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { useRive, Layout, Fit, Alignment } from '@rive-app/react-canvas';
 import CubeTransition from './CubeTransition';
 
@@ -120,10 +120,10 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
               }}
             >
               <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-white/50 ring-offset-0 transition duration-300 group-hover:ring-[#7fb8ff]/80" />
-              <div className="text-lg font-semibold text-slate-900 font-['Noto_Serif_Old_Uyghur',_serif] -mt-1">
+              <div className="text-lg font-semibold text-slate-900 font-[var(--font-noto-old-uyghur)] -mt-1">
                 {finalStep.id}
               </div>
-              <h3 className="mt-4 font-['Noto_Serif_Old_Uyghur',_serif] text-2xl font-semibold text-slate-900 sm:text-[26px] leading-tight">
+              <h3 className="mt-4 font-[var(--font-noto-old-uyghur)] text-2xl font-semibold text-slate-900 sm:text-[26px] leading-tight">
                 {finalStep.title}
               </h3>
             </article>
@@ -161,7 +161,7 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
               <span>{progressPercent}%</span>
             </div>
             <div className="mt-4 h-3 rounded-full bg-slate-200/80">
-              <motion.div
+              <m.div
                 className="h-full rounded-full bg-gradient-to-r from-[#43E1BC] via-[#41D8FF] to-[#4A63FF] shadow-[0_10px_30px_rgba(65,216,255,0.35)]"
                 style={{ width: barWidth }}
               />
@@ -176,7 +176,7 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
                   className="pointer-events-none absolute top-0 z-0 h-full w-px bg-white/60 backdrop-blur"
                   style={{ left: '50%', marginLeft: '-0.5px' }}
                 />
-                <motion.div
+                <m.div
                   className="pointer-events-none absolute top-0 z-0 w-[3px] rounded-full bg-gradient-to-b from-[#42DFBB] via-[#41D8FF] to-[#4D6AFF] shadow-[0_0_25px_rgba(77,106,255,0.25)]"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -200,11 +200,11 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
                       <div className="absolute inset-0 rounded-3xl ring-1 ring-white/50 ring-offset-0 transition duration-300 group-hover:ring-[#7fb8ff]/80" />
 
                       <div className="flex items-center justify-center">
-                        <span className="text-lg font-semibold text-slate-900 -mt-1 font-['Noto_Serif_Old_Uyghur',_serif]">
+                        <span className="text-lg font-semibold text-slate-900 -mt-1 font-[var(--font-noto-old-uyghur)]">
                           {step.id}
                         </span>
                       </div>
-                      <h3 className="mt-4 font-['Noto_Serif_Old_Uyghur',_serif] text-2xl font-semibold text-slate-900 sm:text-[26px]">
+                      <h3 className="mt-4 font-[var(--font-noto-old-uyghur)] text-2xl font-semibold text-slate-900 sm:text-[26px]">
                         {step.title}
                       </h3>
                     </article>

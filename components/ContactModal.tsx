@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 
 type ProjectType = "Landing page" | "Presentational" | "Informational" | "Ecommerce" | "One-pager";
 
@@ -68,14 +68,14 @@ export default function ContactModal({
 
       <AnimatePresence>
         {modalOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-[9998] flex items-center justify-center px-4 sm:px-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
           >
-            <motion.div
+            <m.div
               className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
               onClick={() => setModalOpen(false)}
               initial={{ opacity: 0 }}
@@ -84,7 +84,7 @@ export default function ContactModal({
               transition={{ duration: 0.35, ease: "easeOut" }}
             />
 
-            <motion.div
+            <m.div
               className="relative z-[9999] w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-xl border border-black/5 bg-white p-6 shadow-[0_20px_70px_rgba(0,0,0,0.16)] sm:p-8"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -124,8 +124,8 @@ export default function ContactModal({
                 setNotes={setNotes}
                 onValidSubmit={() => setModalOpen(false)}
               />
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>
@@ -260,7 +260,7 @@ function ContactForm({
           {PROJECT_TYPES.map((type) => {
             const active = projectType === type;
             return (
-              <motion.button
+              <m.button
                 key={type}
                 type="button"
                 whileHover={{ scale: 1.03 }}
@@ -272,7 +272,7 @@ function ContactForm({
                 }`}
               >
                 {type}
-              </motion.button>
+              </m.button>
             );
           })}
         </div>
@@ -343,13 +343,13 @@ function ContactForm({
 
       <div className="relative">
         <div className="pointer-events-none absolute inset-0 scale-110 rounded-full bg-emerald-200/60 blur-[60px]" />
-        <motion.button
+        <m.button
           whileHover={{ scale: 1.01 }}
           type="submit"
           className="relative w-full rounded-full border border-black/10 bg-gradient-to-r from-emerald-300 to-emerald-500 py-3 text-center text-base font-medium text-black shadow-[0_12px_40px_rgba(16,185,129,0.35)] transition hover:shadow-[0_14px_60px_rgba(16,185,129,0.45)] disabled:cursor-not-allowed disabled:opacity-60"
         >
           Submit Request
-        </motion.button>
+        </m.button>
       </div>
 
       {attemptedSubmit && (nameInvalid || emailInvalid) ? (

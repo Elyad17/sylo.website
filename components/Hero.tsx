@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { m, useAnimation } from 'framer-motion';
 import { HOVER_TRANSITION } from './hoverTheme';
 import ContactModal from './ContactModal';
 
@@ -71,7 +71,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
   return (
     <section className="relative min-h-[88vh] overflow-hidden">
       {/* LIGHT background – same as WhyUs default */}
-      <motion.div
+      <m.div
         className="absolute inset-0 -z-10"
         style={{
           backgroundColor: '#ffffff',
@@ -81,7 +81,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
       />
 
       {/* DARK background – same as WhyUs hovered */}
-      <motion.div
+      <m.div
         className="absolute inset-0 -z-10"
         style={{
           backgroundColor: '#020617',
@@ -95,19 +95,19 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
         {/* Navbar */}
         <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-            <motion.div
+            <m.div
               animate={{ color: hovered ? '#ffffff' : '#0f172a' }}
               transition={HOVER_TRANSITION}
               className="text-2xl font-semibold tracking-tight flex-shrink-0"
             >
               PixlBuilder
-            </motion.div>
+            </m.div>
 
             <nav className="hidden md:flex items-center justify-end space-x-0 min-w-[110px]">
               <ContactModal
                 showTrigger={false}
                 renderTrigger={(open) => (
-                  <motion.button
+                  <m.button
                     onClick={open}
                     animate={{ color: hovered ? '#f1f5f9' : '#0f172a' }}
                     whileHover={{ color: hovered ? '#5eead4' : '#0d9488' }}
@@ -115,7 +115,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                     className="cursor-pointer text-sm font-semibold uppercase tracking-[0.16em] w-full text-right inline-flex justify-end focus:outline-none focus:ring-0"
                   >
                     Contact
-                  </motion.button>
+                  </m.button>
                 )}
               />
             </nav>
@@ -143,41 +143,44 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
             <div className="text-center md:text-left md:pl-2 lg:pl-6 xl:pl-10">
               <h1 className="space-y-2 md:space-y-3 lg:space-y-4 md:max-w-5xl">
                 {lines.map((line, idx) => (
-                  <motion.span
+                  <span
                     key={line.text}
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, ease: 'easeOut', delay: idx * 0.05 }}
                     className={[
-                      "font-['Bree_Serif',_serif]",
+                      'font-[var(--font-bree)]',
                       'block',
+                      'hero-line-reveal',
                       'text-[clamp(3rem,8vw,4.4rem)] sm:text-[clamp(3.6rem,7vw,5.6rem)] lg:text-[clamp(4.4rem,6vw,6.4rem)] xl:text-[clamp(4.8rem,5.5vw,7rem)]',
                       'font-extrabold leading-[0.9] tracking-[-0.05em] uppercase',
                       line.align,
                     ].join(' ')}
+                    style={{ animationDelay: `${idx * 0.05}s` }}
                   >
-                    <motion.span
+                    <m.span
                       animate={{ color: hovered ? '#e6fffb' : '#0f172a' }}
                       transition={HOVER_TRANSITION}
                       className="block"
                     >
                       {line.text}
-                    </motion.span>
-                  </motion.span>
+                    </m.span>
+                  </span>
                 ))}
               </h1>
 
-              <motion.div
+              <m.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut', delay: 0.25 }}
                 className="mt-4 h-6 text-center md:text-left md:pl-32 lg:pl-52"
               >
-                <motion.span
+                <m.span
                   animate={{ color: hovered ? '#cbd5e1' : '#475569' }}
                   transition={HOVER_TRANSITION}
-                  className="relative inline-flex items-center gap-3 text-base tracking-[0.04em] uppercase font-['Geo',_sans-serif] whitespace-nowrap"
-                  style={{ minHeight: '1.5rem', minWidth: `${typingText.length + 2}ch` }}
+                  className="relative inline-flex items-center gap-3 text-base tracking-[0.04em] uppercase whitespace-nowrap"
+                  style={{
+                    fontFamily: 'var(--font-geo)',
+                    minHeight: '1.5rem',
+                    minWidth: `${typingText.length + 2}ch`,
+                  }}
                 >
                   <span className="invisible whitespace-nowrap">{`${typingText} ▼`}</span>
                   <span className="absolute inset-0 inline-flex items-center gap-2 whitespace-nowrap">
@@ -211,15 +214,15 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                         );
                       })}
                     </span>
-                    <motion.span
+                    <m.span
                       animate={{ y: [0, -3, 0] }}
                       transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
                     >
                       ▼
-                    </motion.span>
+                    </m.span>
                   </span>
-                </motion.span>
-              </motion.div>
+                </m.span>
+              </m.div>
 
 
             </div>
@@ -265,7 +268,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
               </svg>
 
               {/* Rotating ticks */}
-              <motion.div
+              <m.div
                 className="absolute"
                 animate={ticks}
                 style={{ originX: 0.5, originY: 0.5 }}
@@ -284,7 +287,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                     }}
                   />
                 ))}
-              </motion.div>
+              </m.div>
 
               {/* Corners */}
               <CornerBracket side="tl" active={hovered} />
@@ -293,7 +296,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
               <CornerBracket side="br" active={hovered} />
 
               {/* Orb (controls hover) */}
-              <motion.div
+              <m.div
                 onMouseEnter={() => {
                   if (!isMobile) setHovered(true);
                 }}
@@ -312,7 +315,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                 }
                 transition={{ type: 'spring', stiffness: 240, damping: 18 }}
               >
-                <motion.div
+                <m.div
                   className="absolute inset-0"
                   style={{
                     background:
@@ -325,7 +328,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                   }}
                   transition={{ duration: 0.35 }}
                 />
-                <motion.div
+                <m.div
                   className="absolute inset-0 rounded-full"
                   animate={{
                     boxShadow: hovered
@@ -338,7 +341,7 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                   }}
                   transition={{ duration: 1.4, repeat: hovered ? Infinity : 0 }}
                 />
-                <motion.span
+                <m.span
                   animate={{
                     color: hovered ? '#e0f2f1' : '#0f172a',
                   }}
@@ -346,31 +349,31 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                   className="relative z-10 text-sm font-mono uppercase tracking-widest"
                 >
                   hover over me
-                </motion.span>
-              </motion.div>
+                </m.span>
+              </m.div>
 
               {/* Small metric pills */}
-              <motion.div
+              <m.div
                 className="absolute -top-7 left-8"
                 animate={{ opacity: hovered ? 1 : 0.75 }}
                 transition={HOVER_TRANSITION}
               >
                 <Pill label="Higher Conversions" active={hovered} />
-              </motion.div>
-              <motion.div
+              </m.div>
+              <m.div
                 className="absolute top-10 -right-4"
                 animate={{ opacity: hovered ? 1 : 0.75 }}
                 transition={HOVER_TRANSITION}
               >
                 <Pill label="Seamless Flow" active={hovered} />
-              </motion.div>
-              <motion.div
+              </m.div>
+              <m.div
                 className="absolute -bottom-5 right-10"
                 animate={{ opacity: hovered ? 1 : 0.75 }}
                 transition={HOVER_TRANSITION}
               >
                 <Pill label="SEO Optimized" active={hovered} />
-              </motion.div>
+              </m.div>
             </div>
             )}
           </div>
@@ -390,7 +393,7 @@ function Pill({
   active: boolean;
 }) {
   return (
-    <motion.div
+    <m.div
       animate={{
         backgroundColor: active ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.7)',
         borderColor: active ? 'rgba(94,234,212,0.6)' : 'rgba(203,213,225,0.6)',
@@ -399,14 +402,14 @@ function Pill({
       transition={HOVER_TRANSITION}
       className="flex items-center gap-2 rounded-full px-3 py-1.5 shadow-sm border backdrop-blur"
     >
-      <motion.span
+      <m.span
         animate={{ backgroundColor: active ? '#14b8a6' : '#94a3b8' }}
         transition={HOVER_TRANSITION}
         className="h-1.5 w-1.5 rounded-full"
       />
       <span className="font-mono text-[11px]">{label}</span>
       {value ? <span className="text-[12px] font-semibold">{value}</span> : null}
-    </motion.div>
+    </m.div>
   );
 }
 
