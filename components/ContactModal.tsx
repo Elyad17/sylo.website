@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, m } from "framer-motion";
 
-type ProjectType = "Landing page" | "Presentational" | "Informational" | "Ecommerce" | "One-pager";
+type ProjectType = "Landing page" | "Home page" | "Ecommerce" | "One-pager";
 
-const PROJECT_TYPES: ProjectType[] = ["Landing page", "Presentational", "Informational", "Ecommerce", "One-pager"];
+const PROJECT_TYPES: ProjectType[] = ["Landing page", "Home page", "Ecommerce", "One-pager"];
 const BUDGET_OPTIONS = ["< $1,000", "$1,000 – $3,000", "$3,000 – $5,000", "$5,000 – $10,000", "$10,000+"];
 
 type ContactModalProps = {
