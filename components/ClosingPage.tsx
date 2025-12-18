@@ -48,13 +48,13 @@ export default function ClosingPage({ variant = 'page' }: { variant?: ClosingVar
         animate={{ opacity: showText ? 1 : 0 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
       >
-        <h1 className="font-['Russo_One',_sans-serif] text-[clamp(2.6rem,8vw,3.6rem)] sm:text-[clamp(3.2rem,6vw,4.6rem)] lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
+        <h2 className="font-['Russo_One',_sans-serif] text-[clamp(2.6rem,8vw,3.6rem)] sm:text-[clamp(3.2rem,6vw,4.6rem)] lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05]">
           it&apos;s time to
           <br />
           put your business
           <br />
           on the map
-        </h1>
+        </h2>
         <div className="mt-6 sm:mt-12 flex items-center justify-center">
           <div className="relative">
             <div className="pointer-events-none absolute inset-0 rounded-full border border-white/30" />

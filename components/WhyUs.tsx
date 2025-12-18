@@ -110,7 +110,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
           <div className="relative">
             {/* DIGITAL with glitch */}
             <div className="relative w-fit">
-              <motion.h1
+              <motion.h2
                 className={`${manrope.className} block select-none leading-[0.85] font-extrabold tracking-[-0.06em] text-[13vw] md:text-[8.2vw]`}
                 animate={{ color: heroHovered ? '#e5f3ff' : '#020617' }}
                 transition={HOVER_TRANSITION}
@@ -118,7 +118,7 @@ export default function WhyUs({ heroHovered = false }: { heroHovered?: boolean }
                 <span className="digital-glitch" data-text="DIGITAL">
                   DIGITAL
                 </span>
-              </motion.h1>
+              </motion.h2>
             </div>
 
             {/* PRESENCE with glitch */}

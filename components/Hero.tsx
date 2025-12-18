@@ -141,15 +141,16 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 items-center gap-10 lg:gap-12">
             {/* Text column */}
             <div className="text-center md:text-left md:pl-2 lg:pl-6 xl:pl-10">
-              <div className="space-y-2 md:space-y-3 lg:space-y-4 md:max-w-5xl">
+              <h1 className="space-y-2 md:space-y-3 lg:space-y-4 md:max-w-5xl">
                 {lines.map((line, idx) => (
-                  <motion.h1
+                  <motion.span
                     key={line.text}
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.7, ease: 'easeOut', delay: idx * 0.05 }}
                     className={[
                       "font-['Bree_Serif',_serif]",
+                      'block',
                       'text-[clamp(3rem,8vw,4.4rem)] sm:text-[clamp(3.6rem,7vw,5.6rem)] lg:text-[clamp(4.4rem,6vw,6.4rem)] xl:text-[clamp(4.8rem,5.5vw,7rem)]',
                       'font-extrabold leading-[0.9] tracking-[-0.05em] uppercase',
                       line.align,
@@ -162,9 +163,9 @@ export default function Hero({ hovered, setHovered }: HeroProps) {
                     >
                       {line.text}
                     </motion.span>
-                  </motion.h1>
+                  </motion.span>
                 ))}
-              </div>
+              </h1>
 
               <motion.div
                 initial={{ opacity: 0, y: 10 }}

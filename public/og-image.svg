@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="PixlBuilder — Web design for small businesses">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1a36"/>
+      <stop offset="0.55" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#43E1BC"/>
+      <stop offset="0.5" stop-color="#41D8FF"/>
+      <stop offset="1" stop-color="#4A63FF"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="28" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <circle cx="260" cy="210" r="160" fill="#41D8FF" opacity="0.18" filter="url(#soft)"/>
+  <circle cx="940" cy="430" r="220" fill="#43E1BC" opacity="0.14" filter="url(#soft)"/>
+  <circle cx="760" cy="180" r="140" fill="#4A63FF" opacity="0.14" filter="url(#soft)"/>
+
+  <rect x="110" y="110" width="980" height="410" rx="32" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.14)"/>
+  <rect x="150" y="154" width="260" height="10" rx="5" fill="url(#accent)" opacity="0.9"/>
+
+  <text x="150" y="255" fill="#FFFFFF" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="70" font-weight="800" letter-spacing="-1">
+    PixlBuilder
+  </text>
+  <text x="150" y="330" fill="rgba(226,232,240,0.92)" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="34" font-weight="600">
+    Web design for small businesses that converts
+  </text>
+  <text x="150" y="392" fill="rgba(148,163,184,0.95)" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="24" font-weight="500">
+    Free homepage redesign — no obligation
+  </text>
+</svg>

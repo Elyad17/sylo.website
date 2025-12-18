@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://pixlbuilder.com'),
   title: 'PixlBulilder – Innovative Web Solutions',
   description:
     'PixlBulilder is a full-service web development agency. We blend creativity and technology to build fast, accessible and visually striking websites.',
