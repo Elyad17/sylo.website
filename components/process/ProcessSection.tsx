@@ -123,7 +123,7 @@ export function ProcessSection({ variant = 'page' }: { variant?: ProcessSectionV
             </div>
           </div>
 
-          <div className="flex w-full max-w-4xl flex-col items-center justify-center">
+          <div className="flex w-full max-w-4xl flex-col items-center justify-center mt-1 sm:-mt-1">
             <div className="h-10 w-[3px] rounded-full bg-[#4b89ff] shadow-[0_0_25px_rgba(77,106,255,0.25)] -mb-1" />
             <article
               className="group relative mt-1 w-[88%] max-w-2xl md:w-[58%] rounded-3xl border border-white/60 bg-white/78 px-6 py-8 text-center shadow-[0_25px_80px_rgba(15,23,42,0.12)] backdrop-blur-xl transition duration-300"
